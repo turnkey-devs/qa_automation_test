@@ -66,7 +66,7 @@ export class approvalAdmin {
     const pass = 'HealthCheck11!!';
 
     // Buka web admin dan login
-    cy.visit('https://new-admin-staging.primecodex.com/');
+    cy.visit(Cypress.env("STAGING_ADMIN_URL"));
     cy.wait(3000);
     cy.get('input[name="email"]').type(email).should('have.value', email);
     cy.wait(500);

@@ -5,17 +5,17 @@ const commonFunction = new commonObject();
 const approvalAdminFunction = new approvalAdmin();
 
 describe('New Investors Register', () => {
+  const email = Cypress.env('EMAIL_VALID');
+  const pass = Cypress.env('PASS_VALID');
+
   beforeEach(() => {
     cy.viewport(1280, 720);
-    cy.visit('https://staging-secure-pamm2.primecodex.com/');
+    cy.visit(Cypress.env('STAGING_URL'));
     cy.wait(3000);
   });
 
-  context('Login To Primecodex', () => {
+  context('Verification Identity', () => {
     it('New users want to verification their account but without input all required field', () => {
-      const email = 'testingqaassignment@gmail.com';
-      const pass = 'Testing1234';
-
       // Login
       loginFunction.loginCorrect(email, pass);
 
@@ -38,9 +38,6 @@ describe('New Investors Register', () => {
     });
 
     it('New users want to verification their account but input wrong format images files', () => {
-      const email = 'testingqaassignment@gmail.com';
-      const pass = 'Testing1234';
-
       // Login
       loginFunction.loginCorrect(email, pass);
 
@@ -71,9 +68,6 @@ describe('New Investors Register', () => {
     });
 
     it('New users want to verification their identity account with correct value', () => {
-      const email = 'testingqaassignment@gmail.com';
-      const pass = 'Testing1234';
-
       // Login
       loginFunction.loginCorrect(email, pass);
 
@@ -114,18 +108,17 @@ describe('New Investors Register', () => {
       approvalAdminFunction.approvalIdentity(numberID);
 
       // Buka primecodex staging kembali dan login
-      cy.visit('https://staging-secure-pamm2.primecodex.com/');
+      cy.visit(Cypress.env('STAGING_URL'));
       cy.wait(3000);
       loginFunction.loginCorrect(email, pass);
 
       // Check status verified identity
       cy.get('a[href="/identity"]').parent().find('button').contains('Verified').should('be.visible');
     });
+  });
 
-    it('Users want to verify their banking adress request but without fill any field', () => {
-      const email = 'testingqaassignment@gmail.com';
-      const pass = 'Testing1234';
-
+  context('Verification POA', () => {
+    it('Users want to verify their POA request but without fill any field', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
 
@@ -147,10 +140,7 @@ describe('New Investors Register', () => {
       cy.wait(1000);
     });
 
-    it.only('Users want to verify their banking adress request but with invalid format file', () => {
-      const email = 'testingqaassignment@gmail.com';
-      const pass = 'Testing1234';
-
+    it('Users want to verify their POA request but with invalid format file', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
 

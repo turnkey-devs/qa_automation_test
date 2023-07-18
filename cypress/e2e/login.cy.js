@@ -1,7 +1,7 @@
-describe('New Investors Register', () => {
+describe('New Investors Login', () => {
   beforeEach(() => {
     cy.viewport(1280, 720);
-    cy.visit('https://staging-secure-pamm2.primecodex.com/');
+    cy.visit(Cypress.env('STAGING_URL'));
     cy.wait(3000);
   });
 
@@ -15,7 +15,7 @@ describe('New Investors Register', () => {
   });
 
   it('Users at login page and want to login but only input email field', () => {
-    const email = 'test@gmail.com';
+    const email = Cypress.env('EMAIL_VALID');
 
     // Input Email
     cy.get('input[placeholder="Email"]').type(email).should('have.value', email);
@@ -30,7 +30,7 @@ describe('New Investors Register', () => {
   });
 
   it('Users at login page and want to login but only input password field', () => {
-    const pass = 'Testing1234';
+    const pass = Cypress.env('PASS_VALID');
 
     // Input Email
     cy.get('input[placeholder="password"]').type(pass).should('have.value', pass);
@@ -45,8 +45,8 @@ describe('New Investors Register', () => {
   });
 
   it('Users at login page and want to login but with not valid email format', () => {
-    const email = 'notvalidemail';
-    const pass = 'Testing1234';
+    const email = Cypress.env('EMAIL_NOT_VALID');
+    const pass = Cypress.env('PASS_NOT_VALID');
 
     // Input Email
     cy.get('input[placeholder="Email"]').type(email).should('have.value', email);
@@ -61,8 +61,8 @@ describe('New Investors Register', () => {
   });
 
   it('Users at login page and want to login but with not valid/registered account', () => {
-    const email = 'notregistered@gmail.com';
-    const pass = 'Testing1234';
+    const email = Cypress.env('EMAIL_NOT_REGISTER');
+    const pass = Cypress.env('PASS_NOT_VALID');
 
     // Input Email
     cy.get('input[placeholder="Email"]').type(email).should('have.value', email);
@@ -77,8 +77,8 @@ describe('New Investors Register', () => {
   });
 
   it('Users at login page and want to login and login with correct account', () => {
-    const email = 'testingqaassignment@gmail.com';
-    const pass = 'Testing1234';
+    const email = Cypress.env('EMAIL_VALID');
+    const pass = Cypress.env('PASS_VALID');
 
     // Input Email
     cy.get('input[placeholder="Email"]').type(email).should('have.value', email);
