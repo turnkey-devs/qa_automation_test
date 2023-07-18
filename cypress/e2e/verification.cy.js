@@ -117,7 +117,7 @@ describe('New Investors Register', () => {
     });
   });
 
-  context('Verification POA', () => {
+  context.only('Verification POA', () => {
     it('Users want to verify their POA request but without fill any field', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
@@ -179,18 +179,29 @@ describe('New Investors Register', () => {
               // Input bank account name
               const randChar = commonFunction.randomChar();
               cy.get('input[name="account-name"]').eq(0).type(randChar).should('have.value', randChar);
+              cy.wait(1000);
+
+              // Input notes
+              const randChar2 = commonFunction.randomChar();
+              cy.get('input[name="account-name"]').eq(1).type(randChar2).should('have.value', randChar2);
+              cy.wait(1000);
             } else if ($txt == 'Other') {
               // Input other explaination
               const randChar = commonFunction.randomChar();
               cy.get('input[placeholder="Explain..."]').type(randChar).should('have.value', randChar);
+
+              // Input notes
+              const randChar2 = commonFunction.randomChar();
+              cy.get('input[name="account-name"]').type(randChar2).should('have.value', randChar2);
+              cy.wait(1000);
+            } else {
+              // Input notes
+              const randChar = commonFunction.randomChar();
+              cy.get('input[name="account-name"]').type(randChar).should('have.value', randChar);
+              cy.wait(1000);
             }
           });
       });
-
-      // Input notes
-      const randChar = commonFunction.randomChar();
-      cy.get('input[name="account-name"]').eq(1).type(randChar).should('have.value', randChar);
-      cy.wait(1000);
 
       // Input field file dengan value yang tidak sesuai
       cy.get('input[type="file"]').selectFile('cypress\\fixtures\\pdfExample.pdf');
@@ -201,6 +212,88 @@ describe('New Investors Register', () => {
       cy.get('button').contains('OK').click();
     });
 
-    it('Users want to verify their banking adress request but with correct value', () => {});
+    it('Users want to verify their POA request but with correct value', () => {
+      // Login
+      loginFunction.loginCorrect(email, pass);
+
+      // Klik tombol verify now pada proof of address
+      cy.get('a[href="/verify-poa"] > button').contains('Verify Now').click();
+      cy.wait(2000);
+
+      // Assert membuka halaman yang sesuai
+      cy.url().should('include', '/verify-poa');
+      cy.get('h1').contains('Proof of Address Request').should('be.visible');
+
+      // Input field jenis ID
+      cy.get('div[class="menu hidden"] > div').then(($el) => {
+        // Pilih dropdown dan ambil number index item yang dipilih
+        const number = commonFunction.randomDropdownValueDivPOA($el);
+
+        // Ambil string item div
+        cy.get($el[number])
+          .invoke('text')
+          .then(($txt) => {
+            // Kondisi berdasarkan input yang diberikan
+            if ($txt == 'Bank or Credit Card Statement') {
+              // Input field bank number
+              const numberID = commonFunction.randomNumberID();
+              cy.get('input[name="bank-number"]').type(numberID).should('have.value', numberID);
+
+              // Input nama bank
+              cy.get('div[class="menu hidden"]')
+                .eq(1)
+                .find('div')
+                .then(($el2) => {
+                  // Pilih dropdown dan ambil number index item yang dipilih
+                  commonFunction.randomDropdownValueDivPOA($el2);
+                });
+
+              // Input bank account name
+              const randChar = commonFunction.randomChar();
+              cy.get('input[name="account-name"]').eq(0).type(randChar).should('have.value', randChar);
+              cy.wait(1000);
+
+              // Input notes
+              const randChar2 = commonFunction.randomChar();
+              cy.get('input[name="account-name"]').eq(1).type(randChar2).should('have.value', randChar2);
+              cy.wait(1000);
+            } else if ($txt == 'Other') {
+              // Input other explaination
+              const randChar = commonFunction.randomChar();
+              cy.get('input[placeholder="Explain..."]').type(randChar).should('have.value', randChar);
+
+              // Input notes
+              const randChar2 = commonFunction.randomChar();
+              cy.get('input[name="account-name"]').type(randChar2).should('have.value', randChar2);
+              cy.wait(1000);
+            } else {
+              // Input notes
+              const randChar = commonFunction.randomChar();
+              cy.get('input[name="account-name"]').type(randChar).should('have.value', randChar);
+              cy.wait(1000);
+            }
+          });
+      });
+
+      // Input field file dengan value yang sesuai
+      cy.get('input[type="file"]').selectFile('cypress\\fixtures\\PicExample.png');
+      cy.wait(2000);
+
+      // Klik submit
+      cy.get('button').contains('Submit').click();
+      cy.wait(1000);
+
+      // Klik Yes di verify identity pop up
+      cy.get('button').contains('Yes').click();
+      cy.wait(4000);
+
+      // Assert sukses send request approve identity
+      cy.get('h1').contains('Pending Verification').should('be.visible');
+      cy.url().should('include', '/verify-pending');
+
+      // ============================================================
+      // CARI ITEM REQUEST POA NAMUN PENCARIAN VERIFIKASI TIDAK BISA
+      // ============================================================
+    });
   });
 });
