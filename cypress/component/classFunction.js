@@ -58,6 +58,29 @@ export class commonObject {
 
     return `${empySpace}`;
   }
+
+  checkWithdrawlBalance() {
+    cy.get('h4')
+      .contains('Trading Account Information')
+      .parent()
+      .parent()
+      .find('p')
+      .eq(3)
+      .then(($txt) => {
+        const textBalance = $txt.text().split(' ');
+        const textBalanceNumber = parseFloat(textBalance[textBalance.length - 1]);
+
+        if (textBalanceNumber == 0) {
+          //  Input akun yang ingin di withdraw kembali
+          cy.get('select[name="select-account"] > option').then(($el) => {
+            this.randomDropdownValue('select[name="select-account"]', $el);
+          });
+          cy.wait(2000);
+
+          this.checkWithdrawlBalance();
+        }
+      });
+  }
 }
 
 export class approvalAdmin {
@@ -139,6 +162,38 @@ export class approvalAdmin {
 
     // Assert kalau sukses approve dari admin
     cy.get('tbody > tr').eq(0).find('td > p').contains('APPROVED').should('be.visible');
+
+    // Logout admin
+    this.logoutAdmin();
+  }
+
+  approvalWithdrawal() {
+    // Login admin
+    this.loginAdmin();
+
+    // Buka payment page
+    cy.get('a[href="/payment/"]').click();
+    cy.wait(5000);
+    cy.get('h4').contains('Payment List').should('be.visible');
+
+    // Buka Withdraw
+    cy.get('button').contains('Withdraw').click();
+    cy.wait(3000);
+    cy.get('table').should('be.visible');
+
+    // Approve dari admin dengan ambil row paling atas
+    cy.get('tbody > tr').eq(0).find('svg[data-icon="check"]').click();
+    cy.wait(1500);
+    cy.get('h4').contains('Account will be updated to').should('be.visible');
+    cy.get('textarea[name="comment"]').type('Test').should('have.value', 'Test');
+    cy.get('button').contains('Confirm').click();
+    cy.wait(2000);
+    cy.get('h2').contains('Are your sure?').should('be.visible');
+    cy.get('button').contains('Yes').click();
+    cy.wait(5000);
+    cy.get('h2').contains('SUCCESS!').should('be.visible');
+    cy.get('button').contains('OK').click();
+    cy.get(3000);
 
     // Logout admin
     this.logoutAdmin();
