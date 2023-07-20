@@ -62,11 +62,11 @@ export class commonObject {
 
 export class approvalAdmin {
   loginAdmin() {
-    const email = 'health.check@turnkey.id';
-    const pass = 'HealthCheck11!!';
+    const email = Cypress.env('EMAIL_ADMIN');
+    const pass = Cypress.env('PASS_ADMIN');
 
     // Buka web admin dan login
-    cy.visit(Cypress.env("STAGING_ADMIN_URL"));
+    cy.visit(Cypress.env('STAGING_ADMIN_URL'));
     cy.wait(3000);
     cy.get('input[name="email"]').type(email).should('have.value', email);
     cy.wait(500);
@@ -112,6 +112,33 @@ export class approvalAdmin {
 
     // Check status approval di request yang baru di approve
     cy.get('td').contains(id).parent().find('p').contains('APPROVED').should('be.visible');
+
+    // Logout admin
+    this.logoutAdmin();
+  }
+
+  approvalPOA() {
+    // Login admin
+    this.loginAdmin();
+
+    // Buka verification page
+    cy.get('a[href="/verification/"]').click();
+    cy.wait(5000);
+    cy.get('h4').contains('Verification List').should('be.visible');
+    cy.get('table').should('be.visible');
+
+    // Approve dari admin dengan ambil row paling atas
+    cy.get('tbody > tr').eq(0).find('svg[data-icon="check"]').click();
+    cy.wait(1500);
+    cy.get('h2').contains('Are your sure?').should('be.visible');
+    cy.get('button').contains('Yes').click();
+    cy.wait(5000);
+    cy.get('h2').contains('SUCCESS!').should('be.visible');
+    cy.get('button').contains('OK').click();
+    cy.get(3000);
+
+    // Assert kalau sukses approve dari admin
+    cy.get('tbody > tr').eq(0).find('td > p').contains('APPROVED').should('be.visible');
 
     // Logout admin
     this.logoutAdmin();

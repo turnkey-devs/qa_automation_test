@@ -117,7 +117,7 @@ describe('New Investors Register', () => {
     });
   });
 
-  context.only('Verification POA', () => {
+  context('Verification POA', () => {
     it('Users want to verify their POA request but without fill any field', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
@@ -212,7 +212,7 @@ describe('New Investors Register', () => {
       cy.get('button').contains('OK').click();
     });
 
-    it('Users want to verify their POA request but with correct value', () => {
+    it.only('Users want to verify their POA request but with correct value', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
 
@@ -291,9 +291,16 @@ describe('New Investors Register', () => {
       cy.get('h1').contains('Pending Verification').should('be.visible');
       cy.url().should('include', '/verify-pending');
 
-      // ============================================================
-      // CARI ITEM REQUEST POA NAMUN PENCARIAN VERIFIKASI TIDAK BISA
-      // ============================================================
+      // Approve request POA dari admin
+      approvalAdminFunction.approvalPOA();
+
+      // Buka primecodex staging kembali dan login
+      cy.visit(Cypress.env('STAGING_URL'));
+      cy.wait(3000);
+      loginFunction.loginCorrect(email, pass);
+
+      // Check status verified identity
+      cy.get('a[href="/verify-poa"]').parent().parent().find('p').contains('Verified').should('be.visible');
     });
   });
 });
