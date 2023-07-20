@@ -280,7 +280,7 @@ describe('Withdraw Balance', () => {
       cy.get('button').contains('OK').click();
     });
 
-    it.only('Users want to withdraw their balance with crypto method', () => {
+    it('Users want to withdraw their balance with crypto method', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
 
