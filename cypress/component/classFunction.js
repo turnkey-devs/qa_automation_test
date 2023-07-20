@@ -49,6 +49,16 @@ export class commonObject {
     return `${empySpace}`;
   }
 
+  randomNumberPhone() {
+    const randChar = '0123456789';
+    let empySpace = '';
+    for (let i = 0; i < 10; i++) {
+      empySpace += randChar[Math.floor(Math.random() * randChar.length)];
+    }
+
+    return `${empySpace}`;
+  }
+
   randomChar() {
     const randChar = 'abcdefghijklmnopqrstuvwxyz1234567890';
     let empySpace = '';
@@ -57,6 +67,16 @@ export class commonObject {
     }
 
     return `${empySpace}`;
+  }
+
+  randomEmail() {
+    const randChar = 'abcdefghijklmnopqrstuvwxyz1234567890';
+    let empySpace = '';
+    for (let i = 0; i < 8; i++) {
+      empySpace += randChar[Math.floor(Math.random() * randChar.length)];
+    }
+
+    return `${empySpace}@gmail.com`;
   }
 
   checkWithdrawlBalance() {
