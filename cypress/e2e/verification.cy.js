@@ -212,7 +212,7 @@ describe('New Investors Register', () => {
       cy.get('button').contains('OK').click();
     });
 
-    it.only('Users want to verify their POA request but with correct value', () => {
+    it('Users want to verify their POA request but with correct value', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
 
