@@ -461,7 +461,7 @@ describe('Deposit Balance', () => {
       cy.wait(4000);
       cy.get('table > tr').eq(0).find('td').contains('CANCELED').should('be.visible');
     });
-    it.only('Users want to request deposit to their account with credit card', () => {
+    it('Users want to request deposit to their account with credit card', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
 
