@@ -359,7 +359,7 @@ describe('Withdraw Balance', () => {
       cy.wait(3000);
       loginFunction.loginCorrect(email, pass);
 
-      // Check status verified identity
+      // Check status withdraw
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');

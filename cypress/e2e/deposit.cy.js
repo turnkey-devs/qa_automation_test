@@ -141,7 +141,217 @@ describe('Deposit Balance', () => {
     });
   });
 
-  context('Deposit Via Credit Card', () => {});
+  context('Deposit Via Crypto', () => {
+    it('User want to request deposit to their account with crypto payment method without fill all field', () => {
+      // Login
+      loginFunction.loginCorrect(email, pass);
 
-  context('Deposit Via Crypto', () => {});
+      // Buka deposit menu dari sidebar
+      cy.get('a[href="/deposit"] > div > div > h4').contains('Deposit').click();
+      cy.wait(3000);
+      cy.get('h1').contains('Deposit').should('be.visible');
+
+      // Klik crypto metode payment
+      cy.get('a[href="/deposit-crypto"]').click();
+      cy.wait(5000);
+      cy.get('h3').contains('Select Account').should('be.visible');
+
+      // Klik request deposit
+      cy.get('button').contains('Request Deposit').click();
+      cy.wait(2000);
+
+      // Assert pop up error
+      cy.get('h2').contains('Incomplete Data!').should('be.visible');
+      cy.get('button').contains('Oke').click();
+      cy.wait(1000);
+    });
+    it('User want to request deposit to their account with crypto payment method with minus amount', () => {
+      // Login
+      loginFunction.loginCorrect(email, pass);
+
+      // Buka deposit menu dari sidebar
+      cy.get('a[href="/deposit"] > div > div > h4').contains('Deposit').click();
+      cy.wait(3000);
+      cy.get('h1').contains('Deposit').should('be.visible');
+
+      // Klik crypto metode payment
+      cy.get('a[href="/deposit-crypto"]').click();
+      cy.wait(5000);
+      cy.get('h3').contains('Select Account').should('be.visible');
+
+      // Input amount
+      cy.get('input[name="amount"]').type(-1).should('not.have.value', -1);
+      cy.wait(2000);
+    });
+    it('User want to request deposit to their account with crypto payment but want to cancel it', () => {
+      // Login
+      loginFunction.loginCorrect(email, pass);
+
+      // Buka deposit menu dari sidebar
+      cy.get('a[href="/deposit"] > div > div > h4').contains('Deposit').click();
+      cy.wait(3000);
+      cy.get('h1').contains('Deposit').should('be.visible');
+
+      // Klik crypto metode payment
+      cy.get('a[href="/deposit-crypto"]').click();
+      cy.wait(5000);
+      cy.get('h3').contains('Select Account').should('be.visible');
+
+      // Input akun yang ingin di deposit
+      cy.wait(2000);
+      cy.get('select[name="select-account"] > option').then(($el) => {
+        commonFunction.randomDropdownValue('select[name="select-account"]', $el);
+      });
+      cy.wait(2000);
+
+      // Input amount (input $1 saja)
+      cy.get('input[name="amount"]').type(1).should('have.value', 1);
+      cy.wait(2000);
+
+      // Input crypto address
+      const randCharacters = commonFunction.randomChar();
+      cy.get('input[name="nomor-akun"]').type(randCharacters).should('have.value', randCharacters);
+
+      // Input server network
+      cy.get('label')
+        .contains('Network')
+        .parent()
+        .find('select > option')
+        .then(($el) => {
+          // Logika untuk random value dropdown
+          let randNumber = Math.floor(Math.random() * $el.length);
+          if (randNumber == 0) {
+            randNumber = randNumber + 1;
+          }
+
+          // Pilih items dropdown
+          const valueDrop = $el[randNumber].text;
+          cy.get('select').eq(1).select(valueDrop);
+          cy.wait(1000);
+        });
+
+      // Input checkbox
+      cy.get('input[type="checkbox"]').click();
+      cy.get('input[type="checkbox"]').should('be.checked');
+      cy.wait(1000);
+
+      // Klik proceed deposit
+      cy.get('button').contains('Request Deposit').click();
+      cy.wait(2000);
+      cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
+
+      // Klik yes
+      cy.get('button').contains('Yes').click();
+      cy.wait(5000);
+      cy.url().should('include', '/verify-time');
+
+      // Buka account dashboard
+      cy.get('a[href="/dashboard"]').contains('Account').click();
+      cy.wait(5000);
+
+      // Check status verified identity dan klik cancel
+      cy.get('h1').contains('History Payment').scrollIntoView();
+      cy.get(5000);
+      cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
+      cy.wait(1000);
+      cy.get('h2').contains('Do you want to cancel the deposit?').should('be.visible');
+      cy.get('button').contains('OK').click();
+      cy.wait(4000);
+      cy.get('h2').contains('Success').should('be.visible');
+      cy.get('button').contains('OK').click();
+      cy.wait(4000);
+      cy.get('table > tr').eq(0).find('td').contains('CANCELED').should('be.visible');
+    });
+    it.only('User want to request deposit to their account with crypto payment', () => {
+      // Login
+      loginFunction.loginCorrect(email, pass);
+
+      // Buka deposit menu dari sidebar
+      cy.get('a[href="/deposit"] > div > div > h4').contains('Deposit').click();
+      cy.wait(3000);
+      cy.get('h1').contains('Deposit').should('be.visible');
+
+      // Klik crypto metode payment
+      cy.get('a[href="/deposit-crypto"]').click();
+      cy.wait(5000);
+      cy.get('h3').contains('Select Account').should('be.visible');
+
+      // Input akun yang ingin di deposit
+      cy.wait(2000);
+      cy.get('select[name="select-account"] > option').then(($el) => {
+        commonFunction.randomDropdownValue('select[name="select-account"]', $el);
+      });
+      cy.wait(2000);
+
+      // Input amount (input $1 saja)
+      cy.get('input[name="amount"]').type(1).should('have.value', 1);
+      cy.wait(2000);
+
+      // Input crypto address
+      const randCharacters = commonFunction.randomChar();
+      cy.get('input[name="nomor-akun"]').type(randCharacters).should('have.value', randCharacters);
+
+      // Input server network
+      cy.get('label')
+        .contains('Network')
+        .parent()
+        .find('select > option')
+        .then(($el) => {
+          // Logika untuk random value dropdown
+          let randNumber = Math.floor(Math.random() * $el.length);
+          if (randNumber == 0) {
+            randNumber = randNumber + 1;
+          }
+
+          // Pilih items dropdown
+          const valueDrop = $el[randNumber].text;
+          cy.get('select').eq(1).select(valueDrop);
+          cy.wait(1000);
+        });
+
+      // Input checkbox
+      cy.get('input[type="checkbox"]').click();
+      cy.get('input[type="checkbox"]').should('be.checked');
+      cy.wait(1000);
+
+      // Klik proceed deposit
+      cy.get('button').contains('Request Deposit').click();
+      cy.wait(2000);
+      cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
+
+      // Klik yes
+      cy.get('button').contains('Yes').click();
+      cy.wait(5000);
+      cy.url().should('include', '/verify-time');
+
+      // Input field file dengan value yang sesuai
+      cy.get('input[type="file"]').eq(1).selectFile('cypress\\fixtures\\PicExample.png');
+      cy.wait(2000);
+
+      // Klik Send Proof
+      cy.get('button').contains('Send Proof').click();
+      cy.wait(2000);
+      cy.get('h2').contains('Deposit Verification').should('be.visible');
+
+      // Klik Yes
+      cy.get('button').contains('Yes').click();
+      cy.wait(3000);
+      cy.get('h2').contains('Success').should('be.visible');
+
+      // Cek approval admin
+      approvalAdminFunction.approvalDeposit();
+
+      // Buka primecodex staging kembali dan login
+      cy.visit(Cypress.env('STAGING_URL'));
+      cy.wait(3000);
+      loginFunction.loginCorrect(email, pass);
+
+      // Check status deposit
+      cy.get('h1').contains('History Payment').scrollIntoView();
+      cy.get(5000);
+      cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
+    });
+  });
+
+  context('Deposit Via Credit Card', () => {});
 });

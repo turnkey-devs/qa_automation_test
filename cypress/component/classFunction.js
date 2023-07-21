@@ -218,4 +218,32 @@ export class approvalAdmin {
     // Logout admin
     this.logoutAdmin();
   }
+
+  approvalDeposit() {
+    // Login admin
+    this.loginAdmin();
+
+    // Buka payment page
+    cy.get('a[href="/payment/"]').click();
+    cy.wait(5000);
+    cy.get('h4').contains('Payment List').should('be.visible');
+    cy.get('table').should('be.visible');
+
+    // Approve dari admin dengan ambil row paling atas
+    cy.get('tbody > tr').eq(0).find('svg[data-icon="check"]').click();
+    cy.wait(1500);
+    cy.get('h4').contains('Account will be updated to').should('be.visible');
+    cy.get('textarea[name="comment"]').clear().type('Test').should('have.value', 'Test');
+    cy.get('button').contains('Confirm').click();
+    cy.wait(2000);
+    cy.get('h2').contains('Are your sure?').should('be.visible');
+    cy.get('button').contains('Yes').click();
+    cy.wait(5000);
+    cy.get('h2').contains('SUCCESS!').should('be.visible');
+    cy.get('button').contains('OK').click();
+    cy.get(3000);
+
+    // Logout admin
+    this.logoutAdmin();
+  }
 }
