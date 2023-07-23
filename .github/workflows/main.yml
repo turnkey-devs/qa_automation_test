@@ -19,6 +19,10 @@ jobs:
     environment:
       name: TurnkeyID
     steps:
+      - name: Check ENV
+        run: echo "${{env.STAGING_URL}}"
+          echo "${{env.EMAIL_VALID}}"
+          echo "${{env.PASS_VALID}}"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cypress Run Script
