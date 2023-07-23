@@ -12,10 +12,10 @@ jobs:
       CYPRESS_TOKEN: ${{ vars.CYPRESS_TOKEN }}
     steps:
       - name: Check ENV
-        run: echo "$STAGING_URL"
-          echo "$EMAIL_VALID"
-          echo "$PASS_VALID"
-          echo "$CYPRESS_TOKEN"
+        run: echo "${{env.STAGING_URL}}"
+          echo "${{env.EMAIL_VALID}}"
+          echo "${{env.PASS_VALID}}"
+          echo "${{env.CYPRESS_TOKEN}}"
       # - name: Checkout
       #   uses: actions/checkout@v3
       # - name: Cypress Run Script
