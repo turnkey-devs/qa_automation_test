@@ -5,6 +5,8 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    environment:
+      name: TurnkeyID
     env:
       STAGING_URL: ${{ vars.STAGING_URL }}
       EMAIL_VALID: ${{ vars.EMAIL_VALID }}
