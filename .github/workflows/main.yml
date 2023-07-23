@@ -5,6 +5,17 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    env:
+      CYPRESS_TOKEN: ${{ vars.CYPRESS_TOKEN }}
+      STAGING_URL: ${{ vars.STAGING_URL }}
+      STAGING_ADMIN_URL: ${{ vars.STAGING_ADMIN_URL }}
+      EMAIL_VALID: ${{ vars.EMAIL_VALID }}
+      PASS_VALID: ${{ vars.PASS_VALID }}
+      EMAIL_NOT_VALID: ${{ vars.EMAIL_NOT_VALID }}
+      EMAIL_NOT_REGISTER: ${{ vars.EMAIL_NOT_REGISTER }}
+      PASS_NOT_VALID: ${{ vars.PASS_NOT_VALID }}
+      EMAIL_ADMIN: ${{ vars.EMAIL_ADMIN }}
+      PASS_ADMIN: ${{ vars.PASS_ADMIN }}
     environment:
       name: TurnkeyID
     steps:
@@ -12,18 +23,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Cypress Run Script
         uses: cypress-io/github-action@v5
-        env:
-          CYPRESS_TOKEN: ${{ vars.CYPRESS_TOKEN }}
-          STAGING_URL: ${{ vars.STAGING_URL }}
-          STAGING_ADMIN_URL: ${{ vars.STAGING_ADMIN_URL }}
-          EMAIL_VALID: ${{ vars.EMAIL_VALID }}
-          PASS_VALID: ${{ vars.PASS_VALID }}
-          EMAIL_NOT_VALID: ${{ vars.EMAIL_NOT_VALID }}
-          EMAIL_NOT_REGISTER: ${{ vars.EMAIL_NOT_REGISTER }}
-          PASS_NOT_VALID: ${{ vars.PASS_NOT_VALID }}
-          EMAIL_ADMIN: ${{ vars.EMAIL_ADMIN }}
-          PASS_ADMIN: ${{ vars.PASS_ADMIN }}
         with:
           build: npm install
           browser: chrome
-          start: npx cypress run --spec 'cypress/e2e/login.cy.js' --record --key ${{env.CYPRESS_TOKEN}}
+          start: npx cypress run --env STAGING_URL=${{env.STAGING_URL}} EMAIL_VALID=${{env.EMAIL_VALID}} PASS_VALID=${{env.PASS_VALID}} --spec cypress/e2e/login.cy.js
