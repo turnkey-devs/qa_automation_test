@@ -23,14 +23,10 @@ describe('Deposit Balance', () => {
       cy.get('a[href="/deposit"] > div > div > h4').contains('Deposit').click();
       cy.wait(3000);
       cy.get('h1').contains('Deposit').should('be.visible');
-
-      // Klik bank & va sebagai metode payment
-      cy.get('div').contains('Bank Transfer & Virtual Account').click();
-      cy.wait(5000);
-      cy.get('h2').contains('Input deposit amount').should('be.visible');
+      cy.get('h3').contains('Select Account').should('be.visible');
 
       // Klik proceed deposit
-      cy.get('button').contains('Proceed Deposit').click();
+      cy.get('button').contains('Request Deposit').click();
       cy.wait(2000);
 
       // Assert pop up error
@@ -46,11 +42,7 @@ describe('Deposit Balance', () => {
       cy.get('a[href="/deposit"] > div > div > h4').contains('Deposit').click();
       cy.wait(3000);
       cy.get('h1').contains('Deposit').should('be.visible');
-
-      // Klik bank & va sebagai metode payment
-      cy.get('div').contains('Bank Transfer & Virtual Account').click();
-      cy.wait(5000);
-      cy.get('h2').contains('Input deposit amount').should('be.visible');
+      cy.get('h3').contains('Select Account').should('be.visible');
 
       // Input akun yang ingin di deposit
       cy.wait(2000);
@@ -63,21 +55,44 @@ describe('Deposit Balance', () => {
       cy.get('input[name="amount"]').type(1).should('have.value', 1);
       cy.wait(2000);
 
+      // Input nama akun bank
+      const randCharacters = commonFunction.randomChar();
+      cy.get('input[name="akun-pemilik"]').type(randCharacters).should('have.value', randCharacters);
+      cy.wait(1000);
+
+      // Input nomor akun bank
+      const randNumber = commonFunction.randomNumberID();
+      cy.get('input[name="nomor-akun"]').type(randNumber).should('have.value', randNumber);
+      cy.wait(1000);
+
+      // Input nama bank
+      cy.get('div[class="menu hidden"]')
+        .find('div')
+        .then(($el2) => {
+          // Pilih dropdown dan ambil number index item yang dipilih
+          commonFunction.randomDropdownValueDivPOA($el2);
+        });
+
       // Input checkbox
       cy.get('input[type="checkbox"]').click();
       cy.get('input[type="checkbox"]').should('be.checked');
       cy.wait(1000);
 
       // Klik proceed deposit
-      cy.get('button').contains('Proceed Deposit').click();
+      cy.get('button').contains('Request Deposit').click();
       cy.wait(2000);
-      cy.get('h2').contains('To finalize the payment').should('be.visible');
+      cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
 
       // Klik yes
-      cy.get('button').contains('Yes, Continue Payment').click();
+      cy.get('button').contains('Yes').click();
       cy.wait(5000);
-      cy.get('div').contains('To complete your payment').should('be.visible');
-      cy.get('button').contains('OK').click();
+      cy.get('div').contains('Payment Method Notice').should('be.visible');
+      cy.get('button').contains('BCA Bank Transfer').click();
+      cy.wait(5000);
+      cy.url().should('include', '/verify-time');
+
+      // Buka account dashboard
+      cy.get('a[href="/dashboard"]').contains('Account').click();
       cy.wait(5000);
 
       // Check status verified identity dan klik cancel
@@ -93,6 +108,7 @@ describe('Deposit Balance', () => {
       cy.wait(4000);
       cy.get('table > tr').eq(0).find('td').contains('CANCELED').should('be.visible');
     });
+
     it('Users want to request deposit to their account with transfer method', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
@@ -101,11 +117,6 @@ describe('Deposit Balance', () => {
       cy.get('a[href="/deposit"] > div > div > h4').contains('Deposit').click();
       cy.wait(3000);
       cy.get('h1').contains('Deposit').should('be.visible');
-
-      // Klik bank & va sebagai metode payment
-      cy.get('div').contains('Bank Transfer & Virtual Account').click();
-      cy.wait(5000);
-      cy.get('h2').contains('Input deposit amount').should('be.visible');
 
       // Input akun yang ingin di deposit
       cy.wait(2000);
@@ -118,26 +129,68 @@ describe('Deposit Balance', () => {
       cy.get('input[name="amount"]').type(1).should('have.value', 1);
       cy.wait(2000);
 
+      // Input nama akun bank
+      const randCharacters = commonFunction.randomChar();
+      cy.get('input[name="akun-pemilik"]').type(randCharacters).should('have.value', randCharacters);
+      cy.wait(1000);
+
+      // Input nomor akun bank
+      const randNumber = commonFunction.randomNumberID();
+      cy.get('input[name="nomor-akun"]').type(randNumber).should('have.value', randNumber);
+      cy.wait(1000);
+
+      // Input nama bank
+      cy.get('div[class="menu hidden"]')
+        .find('div')
+        .then(($el2) => {
+          // Pilih dropdown dan ambil number index item yang dipilih
+          commonFunction.randomDropdownValueDivPOA($el2);
+        });
+
       // Input checkbox
       cy.get('input[type="checkbox"]').click();
       cy.get('input[type="checkbox"]').should('be.checked');
       cy.wait(1000);
 
       // Klik proceed deposit
-      cy.get('button').contains('Proceed Deposit').click();
+      cy.get('button').contains('Request Deposit').click();
       cy.wait(2000);
-      cy.get('h2').contains('To finalize the payment').should('be.visible');
+      cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
 
       // Klik yes
-      cy.get('button').contains('Yes, Continue Payment').click();
+      cy.get('button').contains('Yes').click();
       cy.wait(5000);
-      cy.get('div').contains('To complete your payment').should('be.visible');
-      cy.get('button').contains('OK').click();
+      cy.get('div').contains('Payment Method Notice').should('be.visible');
+      cy.get('button').contains('BCA Bank Transfer').click();
       cy.wait(5000);
+      cy.url().should('include', '/verify-time');
 
-      // ===============================================================================
-      // CYPRESS TIDAK DAPAT HANDLE NEW TAB SELAIN DARI LINK YANG ADA TARGET BLANK NYA
-      // ===============================================================================
+      // Input field file dengan value yang sesuai
+      cy.get('input[type="file"]').eq(1).selectFile('cypress\\fixtures\\PicExample.png');
+      cy.wait(2000);
+
+      // Klik Send Proof
+      cy.get('button').contains('Send Proof').click();
+      cy.wait(2000);
+      cy.get('h2').contains('Deposit Verification').should('be.visible');
+
+      // Klik Yes
+      cy.get('button').contains('Yes').click();
+      cy.wait(3000);
+      cy.get('h2').contains('Success').should('be.visible');
+
+      // Cek approval admin
+      approvalAdminFunction.approvalDeposit();
+
+      // Buka primecodex staging kembali dan login
+      cy.visit(Cypress.env('STAGING_URL'));
+      cy.wait(3000);
+      loginFunction.loginCorrect(email, pass);
+
+      // Check status deposit
+      cy.get('h1').contains('History Payment').scrollIntoView();
+      cy.get(5000);
+      cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });
 
