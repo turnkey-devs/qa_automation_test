@@ -10,9 +10,9 @@ jobs:
         uses: actions/checkout@v3
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
-      - name: Cypress run
+      - name: Cypress Run Script
         uses: cypress-io/github-action@v5
         with:
-          build: npm run build
+          build: npm install
           browser: chrome
           start: npx cypress run --spec cypress\e2e\login.cy.js --record --key c6ebb6eb-5154-4de9-b073-de46b7fc21ca
