@@ -25,4 +25,4 @@ jobs:
         with:
           build: npm install
           browser: chrome
-          start: npx cypress run --spec cypress/e2e/login.cy.js --record --key $CYPRESS_TOKEN
+          start: npx cypress run --spec cypress/e2e/login.cy.js --record --key ${CYPRESS_TOKEN}
