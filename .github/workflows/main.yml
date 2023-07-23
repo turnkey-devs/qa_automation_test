@@ -5,6 +5,10 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    env:
+      STAGING_URL: ${env.STAGING_URL}
+      EMAIL_VALID: ${env.EMAIL_VALID}
+      PASS_VALID: ${env.PASS_VALID}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
