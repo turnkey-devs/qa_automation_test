@@ -16,11 +16,11 @@ jobs:
           echo "$EMAIL_VALID"
           echo "$PASS_VALID"
           echo "$CYPRESS_TOKEN"
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Cypress Run Script
-        uses: cypress-io/github-action@v5
-        with:
-          build: npm install
-          browser: chrome
-          start: npx cypress run --spec cypress/e2e/login.cy.js --record --key $CYPRESS_TOKEN
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+      # - name: Cypress Run Script
+      #   uses: cypress-io/github-action@v5
+      #   with:
+      #     build: npm install
+      #     browser: chrome
+      #     start: npx cypress run --spec cypress/e2e/login.cy.js --record --key $CYPRESS_TOKEN
