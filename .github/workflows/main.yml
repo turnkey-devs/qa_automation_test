@@ -30,4 +30,4 @@ jobs:
         with:
           build: npm install
           browser: chrome
-          start: npx cypress run --spec "cypress/e2e/login.cy.js" --env STAGING_URL=${{env.STAGING_URL}} EMAIL_VALID=${{env.EMAIL_VALID}} PASS_VALID=${{env.PASS_VALID}}
+          start: npx cypress run --spec 'cypress/e2e/login.cy.js' --env STAGING_URL=${{env.STAGING_URL}} EMAIL_VALID=${{env.EMAIL_VALID}} PASS_VALID=${{env.PASS_VALID}}
