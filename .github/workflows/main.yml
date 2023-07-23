@@ -5,10 +5,6 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
-    env:
-      STAGING_URL: ${STAGING_URL}
-      EMAIL_VALID: ${EMAIL_VALID}
-      PASS_VALID: ${PASS_VALID}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -17,4 +13,4 @@ jobs:
         with:
           build: npm install
           browser: chrome
-          start: npx cypress run --spec cypress/e2e/login.cy.js --record --key c6ebb6eb-5154-4de9-b073-de46b7fc21ca
+          start: npx cypress run --env STAGING_URL=${STAGING_URL},EMAIL_VALID=${EMAIL_VALID},PASS_VALID=${PASS_VALID} --spec cypress/e2e/login.cy.js --record --key c6ebb6eb-5154-4de9-b073-de46b7fc21ca
