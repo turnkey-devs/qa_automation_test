@@ -15,4 +15,8 @@ jobs:
         with:
           build: npm install
           browser: chrome
+          env:
+            STAGING_URL: ${{ env.STAGING_URL }}
+            EMAIL_VALID: ${{ env.EMAIL_VALID }}
+            PASS_VALID: ${{ env.PASS_VALID }}
           start: npx cypress run --spec cypress/e2e/login.cy.js --record --key c6ebb6eb-5154-4de9-b073-de46b7fc21ca
