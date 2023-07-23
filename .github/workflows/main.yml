@@ -6,9 +6,9 @@ jobs:
   cypress-run:
     runs-on: ubuntu-22.04
     env:
-      STAGING_URL: !ENV ${STAGING_URL}
-      EMAIL_VALID: !ENV ${EMAIL_VALID}
-      PASS_VALID: !ENV ${PASS_VALID}
+      STAGING_URL: ${STAGING_URL}
+      EMAIL_VALID: ${EMAIL_VALID}
+      PASS_VALID: ${PASS_VALID}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
