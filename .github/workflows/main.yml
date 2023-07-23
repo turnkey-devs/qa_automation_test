@@ -7,10 +7,6 @@ jobs:
     runs-on: ubuntu-22.04
     environment:
       name: TurnkeyID
-    env:
-      STAGING_URL: ${{ vars.STAGING_URL }}
-      EMAIL_VALID: ${{ vars.EMAIL_VALID }}
-      PASS_VALID: ${{ vars.PASS_VALID }}
     steps:
       - name: Check ENV
         run: echo "$STAGING_URL"
