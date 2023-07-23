@@ -5,6 +5,8 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    environment:
+      name: TurnkeyID
     env:
       STAGING_URL: ${{ vars.STAGING_URL }}
       EMAIL_VALID: ${{ vars.EMAIL_VALID }}
@@ -14,11 +16,3 @@ jobs:
         run: echo "${{ env.STAGING_URL }}"
           echo "${{ env.STAGING_URL }}"
           echo "${{ env.STAGING_URL }}"
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Cypress Run Script
-        uses: cypress-io/github-action@v5
-        with:
-          build: npm install
-          browser: chrome
-          start: npx cypress run --spec cypress/e2e/login.cy.js --record --key c6ebb6eb-5154-4de9-b073-de46b7fc21ca
