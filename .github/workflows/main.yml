@@ -19,6 +19,11 @@ jobs:
     environment:
       name: TurnkeyID
     steps:
+      - name: Check ENV
+        run:
+          echo "${{env.STAGING_URL}}"
+          echo "${{env.EMAIL_VALID}}"
+          echo "${{env.PASS_VALID}}"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cypress Run Script
@@ -26,4 +31,4 @@ jobs:
         with:
           build: npm install
           browser: chrome
-          start: npx cypress run --env STAGING_URL=${{env.STAGING_URL}} EMAIL_VALID=${{env.EMAIL_VALID}} PASS_VALID=${{env.PASS_VALID}} --spec cypress/e2e/login.cy.js
+          start: npx cypress run --env STAGING_URL=${{env.STAGING_URL}},EMAIL_VALID=${{env.EMAIL_VALID}},PASS_VALID=${{env.PASS_VALID}} --spec cypress/e2e/login.cy.js
