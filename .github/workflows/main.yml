@@ -17,7 +17,7 @@ jobs:
         run: echo "$STAGING_URL"
           echo "$EMAIL_VALID"
           echo "$PASS_VALID"
-          echo "$env.CYPRESS_TOKEN"
+          echo "$CYPRESS_TOKEN"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cypress Run Script
