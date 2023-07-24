@@ -86,8 +86,8 @@ describe('Deposit Balance', () => {
       // Klik yes
       cy.get('button').contains('Yes').click();
       cy.wait(5000);
-      cy.get('div').contains('Payment Method Notice').should('be.visible');
-      cy.get('button').contains('BCA Bank Transfer').click();
+      cy.get('div').contains('To complete your payment').should('be.visible');
+      cy.get('button').contains('Transfer Manual').click();
       cy.wait(5000);
       cy.url().should('include', '/verify-time');
 
@@ -160,8 +160,8 @@ describe('Deposit Balance', () => {
       // Klik yes
       cy.get('button').contains('Yes').click();
       cy.wait(5000);
-      cy.get('div').contains('Payment Method Notice').should('be.visible');
-      cy.get('button').contains('BCA Bank Transfer').click();
+      cy.get('div').contains('To complete your payment').should('be.visible');
+      cy.get('button').contains('Transfer Manual').click();
       cy.wait(5000);
       cy.url().should('include', '/verify-time');
 
