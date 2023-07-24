@@ -1,8 +1,9 @@
 name: Cypress Tests
 
+# Setiap jam 8 pagi dan 4 sore WIB (UTC+7)
 on:
   schedule:
-    - cron: '0 8 * * 1-5'
+    - cron: '0 1 * * 1-5'
     - cron: '0 9 * * 1-5'
 
 jobs:
