@@ -220,7 +220,7 @@ describe('New Investors Register', () => {
     cy.wait(3500);
 
     // Assert failed
-    cy.get('h4').contains('Legal Information Prime Codex LLC').should('be.visible');
+    cy.get('p').contains('I Agree to Terms and Conditions Set by Prime Codex LLC').should('be.visible');
   });
 
   it('User want to open create primecodex account but with already registered email', () => {

@@ -177,7 +177,7 @@ describe('Withdraw Balance', () => {
 
       // Check status verified identity
       cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get(5000);
+      cy.get(10000);
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });
@@ -361,13 +361,7 @@ describe('Withdraw Balance', () => {
 
       // Check status withdraw
       cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get('body').then(($el) => {
-        if ($el.find('td').contains('Data not available')) {
-          cy.reload();
-          cy.wait(10000);
-        }
-      });
-      cy.get(5000);
+      cy.get(10000);
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });

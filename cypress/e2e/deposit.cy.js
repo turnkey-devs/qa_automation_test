@@ -98,8 +98,9 @@ describe('Deposit Balance', () => {
       // Check status verified identity dan klik cancel
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
-      cy.get('body').then(($el) => {
-        if ($el.find('td').contains('Data not available')) {
+      cy.get('thead').then(($el) => {
+        const rowTd = $el.length;
+        if (rowTd == 0) {
           cy.reload();
           cy.wait(10000);
         }
@@ -196,8 +197,9 @@ describe('Deposit Balance', () => {
       // Check status deposit
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
-      cy.get('body').then(($el) => {
-        if ($el.find('td').contains('Data not available')) {
+      cy.get('thead').then(($el) => {
+        const rowTd = $el.length;
+        if (rowTd == 0) {
           cy.reload();
           cy.wait(10000);
         }
@@ -317,8 +319,9 @@ describe('Deposit Balance', () => {
       // Check status verified identity dan klik cancel
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
-      cy.get('body').then(($el) => {
-        if ($el.find('td').contains('Data not available')) {
+      cy.get('thead').then(($el) => {
+        const rowTd = $el.length;
+        if (rowTd == 0) {
           cy.reload();
           cy.wait(10000);
         }
@@ -420,8 +423,9 @@ describe('Deposit Balance', () => {
       // Check status deposit
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
-      cy.get('body').then(($el) => {
-        if ($el.find('td').contains('Data not available')) {
+      cy.get('thead').then(($el) => {
+        const rowTd = $el.length;
+        if (rowTd == 0) {
           cy.reload();
           cy.wait(10000);
         }
@@ -528,8 +532,9 @@ describe('Deposit Balance', () => {
       // Check status verified identity dan klik cancel
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
-      cy.get('body').then(($el) => {
-        if ($el.find('td').contains('Data not available')) {
+      cy.get('thead').then(($el) => {
+        const rowTd = $el.length;
+        if (rowTd == 0) {
           cy.reload();
           cy.wait(10000);
         }
@@ -603,8 +608,9 @@ describe('Deposit Balance', () => {
       // Check status deposit
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
-      cy.get('body').then(($el) => {
-        if ($el.find('td').contains('Data not available')) {
+      cy.get('thead').then(($el) => {
+        const rowTd = $el.length;
+        if (rowTd == 0) {
           cy.reload();
           cy.wait(10000);
         }
