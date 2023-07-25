@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Current Directory
+      - name: Current Directory Workspace
         run: echo "$GITHUB_WORKSPACE"
 
       - name: List File/Folder in Directory
@@ -27,7 +27,7 @@ jobs:
         with:
           name: build
           if-no-files-found: error
-          path: /
+          path: $GITHUB_WORKSPACE
   cypress-run:
     runs-on: ubuntu-22.04
     needs: install
