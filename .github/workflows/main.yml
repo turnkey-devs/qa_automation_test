@@ -27,7 +27,7 @@ jobs:
         with:
           name: build
           if-no-files-found: error
-          path: $GITHUB_WORKSPACE
+          path: ${{ github.workspace }}
   cypress-run:
     runs-on: ubuntu-22.04
     needs: install
