@@ -1,14 +1,33 @@
 name: Cypress Tests
 
-# Setiap jam 8 pagi dan 4 sore WIB (UTC+7)
-on:
-  schedule:
-    - cron: '0 1 * * 1-5'
-    - cron: '0 9 * * 1-5'
+on: push
 
 jobs:
+  install:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v5
+        with:
+          # Disable running of tests within install job
+          runTests: false
+          build: npm run build
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          if-no-files-found: error
+          path: dist
   cypress-run:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4]
     env:
       CYPRESS_TOKEN: ${{ vars.CYPRESS_TOKEN }}
       STAGING_URL: ${{ vars.STAGING_URL }}
@@ -23,15 +42,16 @@ jobs:
     environment:
       name: TurnkeyID
     steps:
-      - name: Check ENV
-        run: echo "${{env.STAGING_URL}}"
-          echo "${{env.EMAIL_VALID}}"
-          echo "${{env.PASS_VALID}}"
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Download the build folder
+        uses: actions/download-artifact@v3
+        with:
+          name: build
       - name: Cypress Run Script
         uses: cypress-io/github-action@v5
         with:
           build: npm install
           browser: chrome
-          command: npx cypress run --env STAGING_URL=${{env.STAGING_URL}},STAGING_ADMIN_URL=${{env.STAGING_ADMIN_URL}},EMAIL_VALID=${{env.EMAIL_VALID}},PASS_VALID=${{env.PASS_VALID}},EMAIL_NOT_VALID=${{env.EMAIL_NOT_VALID}},EMAIL_NOT_REGISTER=${{env.EMAIL_NOT_REGISTER}},PASS_NOT_VALID=${{env.PASS_NOT_VALID}},EMAIL_ADMIN=${{env.EMAIL_ADMIN}},PASS_ADMIN=${{env.PASS_ADMIN}} --spec 'cypress/e2e/login.cy.js' --record --key ${{env.CYPRESS_TOKEN}}
+          parallel: true
+          command: npx cypress run --env STAGING_URL=${{env.STAGING_URL}},STAGING_ADMIN_URL=${{env.STAGING_ADMIN_URL}},EMAIL_VALID=${{env.EMAIL_VALID}},PASS_VALID=${{env.PASS_VALID}},EMAIL_NOT_VALID=${{env.EMAIL_NOT_VALID}},EMAIL_NOT_REGISTER=${{env.EMAIL_NOT_REGISTER}},PASS_NOT_VALID=${{env.PASS_NOT_VALID}},EMAIL_ADMIN=${{env.EMAIL_ADMIN}},PASS_ADMIN=${{env.PASS_ADMIN}} --record --key ${{env.CYPRESS_TOKEN}}
