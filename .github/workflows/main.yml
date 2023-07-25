@@ -12,6 +12,9 @@ jobs:
       - name: Current Directory
         run: pwd
 
+      - name: List File/Folder in Directory
+        run: ls
+
       - name: Cypress install
         uses: cypress-io/github-action@v5
         with:
