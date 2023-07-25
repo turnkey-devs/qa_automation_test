@@ -9,6 +9,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Current Directory
+        run: pwd
+
       - name: Cypress install
         uses: cypress-io/github-action@v5
         with:
@@ -21,7 +24,7 @@ jobs:
         with:
           name: build
           if-no-files-found: error
-          path: node_modules
+          path: bin
   cypress-run:
     runs-on: ubuntu-22.04
     needs: install
