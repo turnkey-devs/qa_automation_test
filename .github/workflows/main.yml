@@ -24,6 +24,7 @@ jobs:
           path: dist
   cypress-run:
     runs-on: ubuntu-22.04
+    needs: install
     strategy:
       fail-fast: false
       matrix:
