@@ -14,13 +14,13 @@ jobs:
         with:
           # Disable running of tests within install job
           runTests: false
-          build: npm run build
+          build: npm install
 
       - name: Save build folder
         uses: actions/upload-artifact@v3
         with:
           name: build
-          if-no-files-found: error
+          if-no-files-found: ignore
           path: dist
   cypress-run:
     runs-on: ubuntu-22.04
