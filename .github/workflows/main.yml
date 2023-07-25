@@ -24,7 +24,7 @@ jobs:
         with:
           name: build
           if-no-files-found: error
-          path: bin
+          path: qa_automation_test
   cypress-run:
     runs-on: ubuntu-22.04
     needs: install
