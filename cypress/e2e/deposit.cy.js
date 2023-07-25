@@ -98,6 +98,12 @@ describe('Deposit Balance', () => {
       // Check status verified identity dan klik cancel
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
+      cy.get('body').then(($el) => {
+        if ($el.find('td').contains('Data not available')) {
+          cy.reload();
+          cy.wait(10000);
+        }
+      });
       cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
       cy.wait(1000);
       cy.get('h2').contains('Do you want to cancel the deposit?').should('be.visible');
@@ -166,7 +172,7 @@ describe('Deposit Balance', () => {
       cy.url().should('include', '/verify-time');
 
       // Input field file dengan value yang sesuai
-      cy.get('input[type="file"]').eq(1).selectFile('cypress\\fixtures\\PicExample.png');
+      cy.get('input[type="file"]').eq(1).selectFile('cypress/fixtures/PicExample.png');
       cy.wait(2000);
 
       // Klik Send Proof
@@ -190,6 +196,12 @@ describe('Deposit Balance', () => {
       // Check status deposit
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
+      cy.get('body').then(($el) => {
+        if ($el.find('td').contains('Data not available')) {
+          cy.reload();
+          cy.wait(10000);
+        }
+      });
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });
@@ -305,6 +317,12 @@ describe('Deposit Balance', () => {
       // Check status verified identity dan klik cancel
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
+      cy.get('body').then(($el) => {
+        if ($el.find('td').contains('Data not available')) {
+          cy.reload();
+          cy.wait(10000);
+        }
+      });
       cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
       cy.wait(1000);
       cy.get('h2').contains('Do you want to cancel the deposit?').should('be.visible');
@@ -402,6 +420,12 @@ describe('Deposit Balance', () => {
       // Check status deposit
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
+      cy.get('body').then(($el) => {
+        if ($el.find('td').contains('Data not available')) {
+          cy.reload();
+          cy.wait(10000);
+        }
+      });
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });
@@ -504,6 +528,12 @@ describe('Deposit Balance', () => {
       // Check status verified identity dan klik cancel
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
+      cy.get('body').then(($el) => {
+        if ($el.find('td').contains('Data not available')) {
+          cy.reload();
+          cy.wait(10000);
+        }
+      });
       cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
       cy.wait(1000);
       cy.get('h2').contains('Do you want to cancel the deposit?').should('be.visible');
@@ -573,6 +603,12 @@ describe('Deposit Balance', () => {
       // Check status deposit
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(5000);
+      cy.get('body').then(($el) => {
+        if ($el.find('td').contains('Data not available')) {
+          cy.reload();
+          cy.wait(10000);
+        }
+      });
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });

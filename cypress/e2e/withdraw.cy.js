@@ -272,7 +272,7 @@ describe('Withdraw Balance', () => {
         });
 
       // Input field file dengan value yang tidak sesuai
-      cy.get('input[type="file"]').selectFile('cypress\\fixtures\\pdfExample.pdf');
+      cy.get('input[type="file"]').selectFile('cypress/fixtures/pdfExample.pdf');
       cy.wait(2000);
 
       // Assert pop up error muncul
@@ -329,7 +329,7 @@ describe('Withdraw Balance', () => {
         });
 
       // Input field file dengan value yang sesuai
-      cy.get('input[type="file"]').selectFile('cypress\\fixtures\\PicExample.png');
+      cy.get('input[type="file"]').selectFile('cypress/fixtures/PicExample.png');
       cy.wait(2000);
 
       // Input checkbox
@@ -361,6 +361,12 @@ describe('Withdraw Balance', () => {
 
       // Check status withdraw
       cy.get('h1').contains('History Payment').scrollIntoView();
+      cy.get('body').then(($el) => {
+        if ($el.find('td').contains('Data not available')) {
+          cy.reload();
+          cy.wait(10000);
+        }
+      });
       cy.get(5000);
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
