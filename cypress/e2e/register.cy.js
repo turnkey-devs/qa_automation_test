@@ -8,7 +8,7 @@ describe('New Investors Register', () => {
     cy.visit(Cypress.env('STAGING_URL'));
     cy.wait(3000);
     cy.get('a').contains('Daftar').invoke('removeAttr', 'target').click();
-    cy.wait(3000);
+    cy.wait(10000);
   });
 
   it('Users try to create new account without fill all required field', () => {

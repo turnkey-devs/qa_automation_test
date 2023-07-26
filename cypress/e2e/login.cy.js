@@ -8,7 +8,7 @@ describe('New Investors Login', () => {
   it('Users at login page and want to login but not input all field', () => {
     // Klik login langsung
     cy.get('button[data-cy="submit"]').click();
-    cy.wait(3000);
+    cy.wait(10000);
 
     // Assert kalau tidak bisa dan tetap berada dihalaman login
     cy.get('h1').contains('Login Account').should('be.visible');

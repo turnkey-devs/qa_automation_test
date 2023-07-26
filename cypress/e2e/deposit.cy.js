@@ -11,7 +11,7 @@ describe('Deposit Balance', () => {
   beforeEach(() => {
     cy.viewport(1280, 720);
     cy.visit(Cypress.env('STAGING_URL'));
-    cy.wait(3000);
+    cy.wait(10000);
   });
 
   context.skip('Deposit Via Bank & VA', () => {

@@ -11,7 +11,7 @@ describe('Withdraw Balance', () => {
   beforeEach(() => {
     cy.viewport(1280, 720);
     cy.visit(Cypress.env('STAGING_URL'));
-    cy.wait(3000);
+    cy.wait(10000);
   });
 
   context('Local Withdrawl', () => {
