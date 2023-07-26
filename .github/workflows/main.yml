@@ -38,20 +38,23 @@ jobs:
           record: true
           parallel: true
           command: npx cypress run --env STAGING_URL=${{env.STAGING_URL}},STAGING_ADMIN_URL=${{env.STAGING_ADMIN_URL}},EMAIL_VALID=${{env.EMAIL_VALID}},PASS_VALID=${{env.PASS_VALID}},EMAIL_NOT_VALID=${{env.EMAIL_NOT_VALID}},EMAIL_NOT_REGISTER=${{env.EMAIL_NOT_REGISTER}},PASS_NOT_VALID=${{env.PASS_NOT_VALID}},EMAIL_ADMIN=${{env.EMAIL_ADMIN}},PASS_ADMIN=${{env.PASS_ADMIN}}
-          continue-on-error: true
 
       - name: Copy test execution videos
+        if: always()
         run: |
           mkdir public
           cp -r cypress/videos public/videos
 
       - name: Merge test results into one
+        if: always()
         run: npm run report:merge
 
       - name: Generate HTML report
+        if: always()
         run: npm run report:generate
 
       - name: Deploy report page
+        if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
