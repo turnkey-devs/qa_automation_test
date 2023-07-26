@@ -102,7 +102,9 @@ describe('Withdraw Balance', () => {
 
       // Check status verified identity dan klik cancel
       cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get(5000);
+      cy.get(10000);
+      cy.reload();
+      cy.wait(5000);
       cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
       cy.wait(1000);
       cy.get('h2').contains('Do you want to cancel the withdrawal?').should('be.visible');
@@ -178,6 +180,8 @@ describe('Withdraw Balance', () => {
       // Check status verified identity
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(10000);
+      cy.reload();
+      cy.wait(5000);
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });
@@ -362,6 +366,8 @@ describe('Withdraw Balance', () => {
       // Check status withdraw
       cy.get('h1').contains('History Payment').scrollIntoView();
       cy.get(10000);
+      cy.reload();
+      cy.wait(5000);
       cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });

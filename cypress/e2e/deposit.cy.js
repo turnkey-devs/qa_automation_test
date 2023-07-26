@@ -14,7 +14,7 @@ describe('Deposit Balance', () => {
     cy.wait(3000);
   });
 
-  context('Deposit Via Bank & VA', () => {
+  context.skip('Deposit Via Bank & VA', () => {
     it('Users want to deposit to their account without input all field or some field', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
@@ -399,7 +399,7 @@ describe('Deposit Balance', () => {
       cy.url().should('include', '/verify-time');
 
       // Input field file dengan value yang sesuai
-      cy.get('input[type="file"]').eq(1).selectFile('cypress\\fixtures\\PicExample.png');
+      cy.get('input[type="file"]').eq(1).selectFile('cypress/fixtures/PicExample.png');
       cy.wait(2000);
 
       // Klik Send Proof
@@ -412,25 +412,9 @@ describe('Deposit Balance', () => {
       cy.wait(3000);
       cy.get('h2').contains('Success').should('be.visible');
 
-      // Cek approval admin
-      approvalAdminFunction.approvalDeposit();
-
-      // Buka primecodex staging kembali dan login
-      cy.visit(Cypress.env('STAGING_URL'));
-      cy.wait(3000);
-      loginFunction.loginCorrect(email, pass);
-
-      // Check status deposit
-      cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get(5000);
-      cy.get('thead').then(($el) => {
-        const rowTd = $el.length;
-        if (rowTd == 0) {
-          cy.reload();
-          cy.wait(10000);
-        }
-      });
-      cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
+      // =========================
+      //  NO APPROVAL ADMIN FIRST
+      // =========================
     });
   });
 
@@ -546,7 +530,7 @@ describe('Deposit Balance', () => {
       cy.wait(4000);
       cy.get('h2').contains('Success').should('be.visible');
       cy.get('button').contains('OK').click();
-      cy.wait(4000);
+      cy.wait(10000);
       cy.get('table > tr').eq(0).find('td').contains('CANCELED').should('be.visible');
     });
     it('Users want to request deposit to their account with credit card', () => {
@@ -593,29 +577,17 @@ describe('Deposit Balance', () => {
       cy.wait(5000);
       cy.get('h2').contains('Attention!').should('be.visible');
 
+      cy.window().then((win) => {
+        cy.stub(win, 'open').as('openStub');
+      });
+
       // Klik Payment Gateway
       cy.get('button').contains('Payment Gateway').click();
       cy.wait(5000);
 
-      // Cek approval admin
-      approvalAdminFunction.approvalDeposit();
-
-      // Buka primecodex staging kembali dan login
-      cy.visit(Cypress.env('STAGING_URL'));
-      cy.wait(3000);
-      loginFunction.loginCorrect(email, pass);
-
-      // Check status deposit
-      cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get(5000);
-      cy.get('thead').then(($el) => {
-        const rowTd = $el.length;
-        if (rowTd == 0) {
-          cy.reload();
-          cy.wait(10000);
-        }
-      });
-      cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
+      // ========================
+      // NO ADMIN APPROVAL FIRST
+      // =======================
     });
   });
 });

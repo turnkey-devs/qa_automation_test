@@ -19,7 +19,7 @@ export class commonObject {
     // Logika untuk random value dropdown
     let randNumber = Math.floor(Math.random() * element.length);
     if (randNumber == 0) {
-      randNumber = randNumber + 1;
+      randNumber = 1;
     }
 
     // Pilih items dropdown
