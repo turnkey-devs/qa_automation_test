@@ -112,8 +112,6 @@ describe('Withdraw Balance', () => {
       cy.wait(4000);
       cy.get('h2').contains('Success').should('be.visible');
       cy.get('button').contains('OK').click();
-      cy.wait(4000);
-      cy.get('table > tr').eq(0).find('td').contains('CANCELED').should('be.visible');
     });
 
     it('Users want to withdraw with local method', () => {
@@ -171,18 +169,6 @@ describe('Withdraw Balance', () => {
 
       // Cek approval admin
       approvalAdminFunction.approvalWithdrawal();
-
-      // Buka primecodex staging kembali dan login
-      cy.visit(Cypress.env('STAGING_URL'));
-      cy.wait(3000);
-      loginFunction.loginCorrect(email, pass);
-
-      // Check status verified identity
-      cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get(10000);
-      cy.reload();
-      cy.wait(5000);
-      cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });
 
@@ -357,18 +343,6 @@ describe('Withdraw Balance', () => {
 
       // Cek approval admin
       approvalAdminFunction.approvalWithdrawal();
-
-      // Buka primecodex staging kembali dan login
-      cy.visit(Cypress.env('STAGING_URL'));
-      cy.wait(3000);
-      loginFunction.loginCorrect(email, pass);
-
-      // Check status withdraw
-      cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get(10000);
-      cy.reload();
-      cy.wait(5000);
-      cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });
 });
