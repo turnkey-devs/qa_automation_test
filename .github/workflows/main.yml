@@ -29,6 +29,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Cypress Run Script
         uses: cypress-io/github-action@v5
         with:
@@ -36,4 +37,23 @@ jobs:
           browser: chrome
           record: true
           parallel: true
-          command: npx cypress run --env STAGING_URL=${{env.STAGING_URL}},STAGING_ADMIN_URL=${{env.STAGING_ADMIN_URL}},EMAIL_VALID=${{env.EMAIL_VALID}},PASS_VALID=${{env.PASS_VALID}},EMAIL_NOT_VALID=${{env.EMAIL_NOT_VALID}},EMAIL_NOT_REGISTER=${{env.EMAIL_NOT_REGISTER}},PASS_NOT_VALID=${{env.PASS_NOT_VALID}},EMAIL_ADMIN=${{env.EMAIL_ADMIN}},PASS_ADMIN=${{env.PASS_ADMIN}} --record --key ${{env.CYPRESS_TOKEN}} --parallel
+          command: npx cypress run --env STAGING_URL=${{env.STAGING_URL}},STAGING_ADMIN_URL=${{env.STAGING_ADMIN_URL}},EMAIL_VALID=${{env.EMAIL_VALID}},PASS_VALID=${{env.PASS_VALID}},EMAIL_NOT_VALID=${{env.EMAIL_NOT_VALID}},EMAIL_NOT_REGISTER=${{env.EMAIL_NOT_REGISTER}},PASS_NOT_VALID=${{env.PASS_NOT_VALID}},EMAIL_ADMIN=${{env.EMAIL_ADMIN}},PASS_ADMIN=${{env.PASS_ADMIN}} --parallel
+
+      - name: Copy test execution videos
+        run: |
+          mkdir public
+          cp -r cypress/videos public/videos
+
+      - name: Merge test results into one
+        run: npm run report:merge
+
+      - name: Generate HTML report
+        run: npm run report:generate
+
+      - name: Deploy report page
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ env.GIT_TOKEN }}
+          publish_dir: ./public
+          user_name: ${{ env.GIT_USER }}
+          user_email: ${{ env.GIT_EMAIL }}
