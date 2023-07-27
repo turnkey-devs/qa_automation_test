@@ -128,7 +128,7 @@ describe('New Investors Register', () => {
     cy.get('input[type="email"]').type(randomEmail).should('have.value', randomEmail);
 
     // Input pass and confirm pass
-    randCharacters = commonFunction.randomChar();
+    randCharacters = commonFunction.randomPass();
     cy.get('input[placeholder="Input Password"]').type(randCharacters).should('have.value', randCharacters);
     cy.wait(1000);
 

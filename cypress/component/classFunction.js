@@ -69,6 +69,16 @@ export class commonObject {
     return `AutomationQA_${empySpace}`;
   }
 
+  randomPass() {
+    const randChar = 'abcdefghijklmnopqrstuvwxyz1234567890';
+    let empySpace = '';
+    for (let i = 0; i < 10; i++) {
+      empySpace += randChar[Math.floor(Math.random() * randChar.length)];
+    }
+
+    return `${empySpace}`;
+  }
+
   randomEmail() {
     const randChar = 'abcdefghijklmnopqrstuvwxyz1234567890';
     let empySpace = '';
