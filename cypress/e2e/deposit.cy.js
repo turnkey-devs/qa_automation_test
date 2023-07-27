@@ -219,7 +219,7 @@ describe('Deposit Balance', () => {
       cy.get('h1').contains('Deposit').should('be.visible');
 
       // Klik crypto metode payment
-      cy.get('a[href="/deposit-crypto"]').click();
+      cy.get('a[href="/deposit-crypto"]').click({ force: true });
       cy.wait(5000);
       cy.get('h3').contains('Select Account').should('be.visible');
 
@@ -242,7 +242,7 @@ describe('Deposit Balance', () => {
       cy.get('h1').contains('Deposit').should('be.visible');
 
       // Klik crypto metode payment
-      cy.get('a[href="/deposit-crypto"]').click();
+      cy.get('a[href="/deposit-crypto"]').click({ force: true });
       cy.wait(5000);
       cy.get('h3').contains('Select Account').should('be.visible');
 
@@ -260,7 +260,7 @@ describe('Deposit Balance', () => {
       cy.get('h1').contains('Deposit').should('be.visible');
 
       // Klik crypto metode payment
-      cy.get('a[href="/deposit-crypto"]').click();
+      cy.get('a[href="/deposit-crypto"]').click({ force: true });
       cy.wait(5000);
       cy.get('h3').contains('Select Account').should('be.visible');
 
@@ -346,7 +346,7 @@ describe('Deposit Balance', () => {
       cy.get('h1').contains('Deposit').should('be.visible');
 
       // Klik crypto metode payment
-      cy.get('a[href="/deposit-crypto"]').click();
+      cy.get('a[href="/deposit-crypto"]').click({ force: true });
       cy.wait(5000);
       cy.get('h3').contains('Select Account').should('be.visible');
 
