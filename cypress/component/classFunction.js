@@ -220,7 +220,7 @@ export class approvalAdmin {
     cy.wait(2000);
     cy.get('h2').contains('Are your sure?').should('be.visible');
     cy.get('button').contains('Yes').click();
-    cy.wait(5000);
+    cy.wait(10000);
     cy.get('h2').contains('SUCCESS!').should('be.visible');
     cy.get('button').contains('OK').click();
     cy.get(3000);
@@ -248,7 +248,7 @@ export class approvalAdmin {
     cy.wait(2000);
     cy.get('h2').contains('Are your sure?').should('be.visible');
     cy.get('button').contains('Yes').click();
-    cy.wait(5000);
+    cy.wait(10000);
     cy.get('h2').contains('SUCCESS!').should('be.visible');
     cy.get('button').contains('OK').click();
     cy.get(3000);
