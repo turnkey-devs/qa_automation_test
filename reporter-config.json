@@ -4,6 +4,8 @@
     "reportDir": "cypress/results/json",
     "overwrite": false,
     "html": false,
-    "json": true
+    "json": true,
+    "timestamp": "longDate",
+    "charts": true
   }
 }
