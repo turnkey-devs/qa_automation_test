@@ -2,7 +2,7 @@ import { loginFunc, commonObject, approvalAdmin } from './../component/classFunc
 
 const commonFunction = new commonObject();
 
-describe('Verification', () => {
+describe('New Investors Register', () => {
   beforeEach(() => {
     cy.viewport(1280, 720);
     cy.visit(Cypress.env('STAGING_URL'));
