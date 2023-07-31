@@ -1,0 +1,280 @@
+{
+  "stats": {
+    "suites": 3,
+    "tests": 8,
+    "passes": 8,
+    "pending": 0,
+    "failures": 0,
+    "start": "2023-07-31T03:07:25.973Z",
+    "end": "2023-07-31T03:13:33.252Z",
+    "duration": 367279,
+    "testsRegistered": 8,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "c66e20a5-0e37-4139-8b8c-c021a0922486",
+      "title": "",
+      "fullFile": "cypress\\e2e\\withdraw.cy.js",
+      "file": "cypress\\e2e\\withdraw.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "87720031-64de-4f82-868d-1fd550025f49",
+          "title": "Withdraw Balance",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [],
+          "suites": [
+            {
+              "uuid": "0d405061-cfc1-45f7-9064-c2bf233eebd7",
+              "title": "Local Withdrawl",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "Users want to withdraw their balance with local method without input any field",
+                  "fullTitle": "Withdraw Balance Local Withdrawl Users want to withdraw their balance with local method without input any field",
+                  "timedOut": null,
+                  "duration": 26353,
+                  "state": "passed",
+                  "speed": "slow",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "\"videos/withdraw.cy.js.mp4\"",
+                  "code": "// Login\nloginFunction.loginCorrect(email, pass);\n// Buka withdraw menu dari sidebar\ncy.get('a[href=\"/withdraw\"] > div > div > h4').contains('Withdraw').click();\ncy.wait(3000);\ncy.get('h1').contains('Withdraw').should('be.visible');\n// Klik tombol request withdraw\ncy.get('button').contains('Request Withdraw').click();\ncy.wait(2000);\n// Assert pop up error\ncy.get('h2').contains('Incomplete Data!').should('be.visible');\ncy.get('button').contains('Oke').click();\ncy.wait(1000);",
+                  "err": {},
+                  "uuid": "50a9c0ea-fc79-4161-b1a0-19b9837dff86",
+                  "parentUUID": "0d405061-cfc1-45f7-9064-c2bf233eebd7",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "Users want to withdraw their balance with local method but input negatif value in amount",
+                  "fullTitle": "Withdraw Balance Local Withdrawl Users want to withdraw their balance with local method but input negatif value in amount",
+                  "timedOut": null,
+                  "duration": 19725,
+                  "state": "passed",
+                  "speed": "slow",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "\"videos/withdraw.cy.js.mp4\"",
+                  "code": "// Login\nloginFunction.loginCorrect(email, pass);\n// Buka withdraw menu dari sidebar\ncy.get('a[href=\"/withdraw\"] > div > div > h4').contains('Withdraw').click();\ncy.wait(3000);\ncy.get('h1').contains('Withdraw').should('be.visible');\n// Input amount (input $1 saja)\ncy.get('input[name=\"amount\"]').type(-1).should('not.have.value', -1);",
+                  "err": {},
+                  "uuid": "178e0665-0409-4046-905a-60d770328fa1",
+                  "parentUUID": "0d405061-cfc1-45f7-9064-c2bf233eebd7",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "Users want to withdraw with local method but want to cancel it before approved by admin",
+                  "fullTitle": "Withdraw Balance Local Withdrawl Users want to withdraw with local method but want to cancel it before approved by admin",
+                  "timedOut": null,
+                  "duration": 55499,
+                  "state": "passed",
+                  "speed": "slow",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "\"videos/withdraw.cy.js.mp4\"",
+                  "code": "// Login\nloginFunction.loginCorrect(email, pass);\n// Buka withdraw menu dari sidebar\ncy.get('a[href=\"/withdraw\"] > div > div > h4').contains('Withdraw').click();\ncy.wait(3000);\ncy.get('h1').contains('Withdraw').should('be.visible');\n//  Input akun yang ingin di withdraw\ncy.wait(2000);\ncy.get('select[name=\"select-account\"] > option').then($el => {\n  commonFunction.randomDropdownValue('select[name=\"select-account\"]', $el);\n});\ncy.wait(2000);\n//  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi\ncommonFunction.checkWithdrawlBalance();\n// Input amount (input $1 saja)\ncy.get('input[name=\"amount\"]').type(1).should('have.value', 1);\n// Input nama akun\nconst randCharacters = commonFunction.randomChar();\ncy.get('input[name=\"input_akun_pemilik\"]').type(randCharacters).should('have.value', randCharacters);\n// Input nomor akun\nconst randNumber = commonFunction.randomNumberID();\ncy.get('input[name=\"input_nomor_akun\"]').type(randNumber).should('have.value', randNumber);\n// Input nama bank\nconst randCharacters2 = commonFunction.randomChar();\ncy.get('input[name=\"selectBank\"]').type(randCharacters2).should('have.value', randCharacters2);\n// Input checkbox\ncy.get('input[type=\"checkbox\"]').click();\ncy.get('input[type=\"checkbox\"]').should('be.checked');\ncy.wait(1000);\n// Klik tombol request withdraw\ncy.get('button').contains('Request Withdraw').click();\ncy.wait(2000);\ncy.get('h1').contains('Withdrawal Bank').should('be.visible');\n// Klik continue dan yes\ncy.get('button').contains('Continue').click();\ncy.get(2000);\ncy.get('button').contains('Yes').click();\ncy.wait(5000);\ncy.get('h2').contains('Success').should('be.visible');\ncy.get('button').contains('Oke').click();\ncy.wait(3000);\n// Check status verified identity dan klik cancel\ncy.get('h1').contains('History Payment').scrollIntoView();\ncy.get(10000);\ncy.reload();\ncy.wait(5000);\ncy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();\ncy.wait(1000);\ncy.get('h2').contains('Do you want to cancel the withdrawal?').should('be.visible');\ncy.get('button').contains('OK').click();\ncy.wait(4000);\ncy.get('h2').contains('Success').should('be.visible');\ncy.get('button').contains('OK').click();",
+                  "err": {},
+                  "uuid": "41e8ef35-2c69-4a83-9032-8cb5692b6479",
+                  "parentUUID": "0d405061-cfc1-45f7-9064-c2bf233eebd7",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "Users want to withdraw with local method",
+                  "fullTitle": "Withdraw Balance Local Withdrawl Users want to withdraw with local method",
+                  "timedOut": null,
+                  "duration": 86068,
+                  "state": "passed",
+                  "speed": "slow",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "\"videos/withdraw.cy.js.mp4\"",
+                  "code": "// Login\nloginFunction.loginCorrect(email, pass);\n// Buka withdraw menu dari sidebar\ncy.get('a[href=\"/withdraw\"] > div > div > h4').contains('Withdraw').click();\ncy.wait(3000);\ncy.get('h1').contains('Withdraw').should('be.visible');\n//  Input akun yang ingin di withdraw\ncy.wait(2000);\ncy.get('select[name=\"select-account\"] > option').then($el => {\n  commonFunction.randomDropdownValue('select[name=\"select-account\"]', $el);\n});\ncy.wait(2000);\n//  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi\ncommonFunction.checkWithdrawlBalance();\n// Input amount (input $1 saja)\ncy.get('input[name=\"amount\"]').type(1).should('have.value', 1);\n// Input nama akun\nconst randCharacters = commonFunction.randomChar();\ncy.get('input[name=\"input_akun_pemilik\"]').type(randCharacters).should('have.value', randCharacters);\n// Input nomor akun\nconst randNumber = commonFunction.randomNumberID();\ncy.get('input[name=\"input_nomor_akun\"]').type(randNumber).should('have.value', randNumber);\n// Input nama bank\nconst randCharacters2 = commonFunction.randomChar();\ncy.get('input[name=\"selectBank\"]').type(randCharacters2).should('have.value', randCharacters2);\n// Input checkbox\ncy.get('input[type=\"checkbox\"]').click();\ncy.get('input[type=\"checkbox\"]').should('be.checked');\ncy.wait(1000);\n// Klik tombol request withdraw\ncy.get('button').contains('Request Withdraw').click();\ncy.wait(2000);\ncy.get('h1').contains('Withdrawal Bank').should('be.visible');\n// Klik continue dan yes\ncy.get('button').contains('Continue').click();\ncy.get(2000);\ncy.get('button').contains('Yes').click();\ncy.wait(5000);\ncy.get('h2').contains('Success').should('be.visible');\ncy.get('button').contains('Oke').click();\ncy.wait(3000);\n// Cek approval admin\napprovalAdminFunction.approvalWithdrawal();",
+                  "err": {},
+                  "uuid": "5d24d445-1d3d-495f-8b41-e661786580b6",
+                  "parentUUID": "0d405061-cfc1-45f7-9064-c2bf233eebd7",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [
+                "50a9c0ea-fc79-4161-b1a0-19b9837dff86",
+                "178e0665-0409-4046-905a-60d770328fa1",
+                "41e8ef35-2c69-4a83-9032-8cb5692b6479",
+                "5d24d445-1d3d-495f-8b41-e661786580b6"
+              ],
+              "failures": [],
+              "pending": [],
+              "skipped": [],
+              "duration": 187645,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "11c9fae8-4832-4ad7-b2ed-30ca787c19f7",
+              "title": "Crypto Withdrawl",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "Users want to withdraw their balance with crypto method without input any field",
+                  "fullTitle": "Withdraw Balance Crypto Withdrawl Users want to withdraw their balance with crypto method without input any field",
+                  "timedOut": null,
+                  "duration": 26908,
+                  "state": "passed",
+                  "speed": "slow",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "\"videos/withdraw.cy.js.mp4\"",
+                  "code": "// Login\nloginFunction.loginCorrect(email, pass);\n// Buka withdraw menu dari sidebar\ncy.get('a[href=\"/withdraw\"] > div > div > h4').contains('Withdraw').click();\ncy.wait(3000);\ncy.get('h1').contains('Withdraw').should('be.visible');\n// Klik tab crypto\ncy.get('a[href=\"/withdraw-crypto\"]').click();\ncy.wait(4000);\n// Klik tombol request withdraw\ncy.get('button').contains('Request Withdraw').click();\ncy.wait(2000);\n// Assert pop up error\ncy.get('h2').contains('Incomplete Data!').should('be.visible');\ncy.get('button').contains('Oke').click();\ncy.wait(1000);",
+                  "err": {},
+                  "uuid": "fc9738c8-d08a-4054-b3bf-932aca724e20",
+                  "parentUUID": "11c9fae8-4832-4ad7-b2ed-30ca787c19f7",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "Users want to withdraw their balance with crypto method but input negatif value in amount",
+                  "fullTitle": "Withdraw Balance Crypto Withdrawl Users want to withdraw their balance with crypto method but input negatif value in amount",
+                  "timedOut": null,
+                  "duration": 23448,
+                  "state": "passed",
+                  "speed": "slow",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "\"videos/withdraw.cy.js.mp4\"",
+                  "code": "// Login\nloginFunction.loginCorrect(email, pass);\n// Buka withdraw menu dari sidebar\ncy.get('a[href=\"/withdraw\"] > div > div > h4').contains('Withdraw').click();\ncy.wait(3000);\ncy.get('h1').contains('Withdraw').should('be.visible');\n// Klik tab crypto\ncy.get('a[href=\"/withdraw-crypto\"]').click();\ncy.wait(4000);\n// Input amount (input $1 saja)\ncy.get('input[name=\"amount\"]').type(-1).should('not.have.value', -1);",
+                  "err": {},
+                  "uuid": "87c5a82f-c926-4a5d-a2d6-81cb30622a5c",
+                  "parentUUID": "11c9fae8-4832-4ad7-b2ed-30ca787c19f7",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "Users want to withdraw their balance with crypto method but input wallet address with not correct file format",
+                  "fullTitle": "Withdraw Balance Crypto Withdrawl Users want to withdraw their balance with crypto method but input wallet address with not correct file format",
+                  "timedOut": null,
+                  "duration": 34360,
+                  "state": "passed",
+                  "speed": "slow",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "\"videos/withdraw.cy.js.mp4\"",
+                  "code": "// Login\nloginFunction.loginCorrect(email, pass);\n// Buka withdraw menu dari sidebar\ncy.get('a[href=\"/withdraw\"] > div > div > h4').contains('Withdraw').click();\ncy.wait(3000);\ncy.get('h1').contains('Withdraw').should('be.visible');\n// Klik tab crypto\ncy.get('a[href=\"/withdraw-crypto\"]').click();\ncy.wait(4000);\n//  Input akun yang ingin di withdraw\ncy.wait(2000);\ncy.get('select[name=\"select-account\"] > option').then($el => {\n  commonFunction.randomDropdownValue('select[name=\"select-account\"]', $el);\n});\ncy.wait(2000);\n//  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi\ncommonFunction.checkWithdrawlBalance();\n// Input amount (input $1 saja)\ncy.get('input[name=\"amount\"]').type(1).should('have.value', 1);\n// Input wallet address\nconst randCharacters = commonFunction.randomChar();\ncy.get('input[placeholder=\"Your USDT address\"]').type(randCharacters).should('have.value', randCharacters);\n// Input server network\ncy.get('label').contains('Network').parent().find('select > option').then($el => {\n  // Logika untuk random value dropdown\n  let randNumber = Math.floor(Math.random() * $el.length);\n  if (randNumber == 0) {\n    randNumber = randNumber + 1;\n  }\n  // Pilih items dropdown\n  const valueDrop = $el[randNumber].text;\n  cy.get('select').eq(1).select(valueDrop);\n  cy.wait(1000);\n});\n// Input field file dengan value yang tidak sesuai\ncy.get('input[type=\"file\"]').selectFile('cypress/fixtures/pdfExample.pdf');\ncy.wait(2000);\n// Assert pop up error muncul\ncy.get('h2').contains('Your file is not an image').should('be.visible');\ncy.get('button').contains('OK').click();",
+                  "err": {},
+                  "uuid": "a9f31bf7-6c48-4705-ad92-5194d77e0127",
+                  "parentUUID": "11c9fae8-4832-4ad7-b2ed-30ca787c19f7",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "Users want to withdraw their balance with crypto method",
+                  "fullTitle": "Withdraw Balance Crypto Withdrawl Users want to withdraw their balance with crypto method",
+                  "timedOut": null,
+                  "duration": 91604,
+                  "state": "passed",
+                  "speed": "slow",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "\"videos/withdraw.cy.js.mp4\"",
+                  "code": "// Login\nloginFunction.loginCorrect(email, pass);\n// Buka withdraw menu dari sidebar\ncy.get('a[href=\"/withdraw\"] > div > div > h4').contains('Withdraw').click();\ncy.wait(3000);\ncy.get('h1').contains('Withdraw').should('be.visible');\n// Klik tab crypto\ncy.get('a[href=\"/withdraw-crypto\"]').click();\ncy.wait(4000);\n//  Input akun yang ingin di withdraw\ncy.wait(2000);\ncy.get('select[name=\"select-account\"] > option').then($el => {\n  commonFunction.randomDropdownValue('select[name=\"select-account\"]', $el);\n});\ncy.wait(2000);\n//  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi\ncommonFunction.checkWithdrawlBalance();\n// Input amount (input $1 saja)\ncy.get('input[name=\"amount\"]').type(1).should('have.value', 1);\n// Input wallet address\nconst randCharacters = commonFunction.randomChar();\ncy.get('input[placeholder=\"Your USDT address\"]').type(randCharacters).should('have.value', randCharacters);\n// Input server network\ncy.get('label').contains('Network').parent().find('select > option').then($el => {\n  // Logika untuk random value dropdown\n  let randNumber = Math.floor(Math.random() * $el.length);\n  if (randNumber == 0) {\n    randNumber = randNumber + 1;\n  }\n  // Pilih items dropdown\n  const valueDrop = $el[randNumber].text;\n  cy.get('select').eq(1).select(valueDrop);\n  cy.wait(1000);\n});\n// Input field file dengan value yang sesuai\ncy.get('input[type=\"file\"]').selectFile('cypress/fixtures/PicExample.png');\ncy.wait(2000);\n// Input checkbox\ncy.get('input[type=\"checkbox\"]').click();\ncy.get('input[type=\"checkbox\"]').should('be.checked');\ncy.wait(1000);\n// Klik tombol request withdraw\ncy.get('button').contains('Request Withdraw').click();\ncy.wait(2000);\ncy.get('h1').contains('Withdrawal Crypto').should('be.visible');\n// Klik continue dan yes\ncy.get('button').contains('Continue').click();\ncy.get(2000);\ncy.get('button').contains('Yes').click();\ncy.wait(5000);\ncy.get('h2').contains('Your request will be processed').should('be.visible');\ncy.get('button').contains('Oke').click();\ncy.wait(3000);\n// Cek approval admin\napprovalAdminFunction.approvalWithdrawal();",
+                  "err": {},
+                  "uuid": "17fd406d-6ba0-4973-aa43-9e7579f13fc2",
+                  "parentUUID": "11c9fae8-4832-4ad7-b2ed-30ca787c19f7",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [
+                "fc9738c8-d08a-4054-b3bf-932aca724e20",
+                "87c5a82f-c926-4a5d-a2d6-81cb30622a5c",
+                "a9f31bf7-6c48-4705-ad92-5194d77e0127",
+                "17fd406d-6ba0-4973-aa43-9e7579f13fc2"
+              ],
+              "failures": [],
+              "pending": [],
+              "skipped": [],
+              "duration": 176320,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            }
+          ],
+          "passes": [],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 0,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "id": "default",
+        "reportDir": "cypress/results/json",
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "timestamp": "longDate",
+        "charts": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

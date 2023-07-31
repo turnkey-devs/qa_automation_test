@@ -9,10 +9,6 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     containers: [1, 2, 3, 4, 5]
     env:
       CYPRESS_TOKEN: ${{ vars.CYPRESS_TOKEN }}
       STAGING_URL: ${{ vars.STAGING_URL }}
