@@ -69,17 +69,25 @@ describe('Withdraw Balance', () => {
       // Input amount (input $1 saja)
       cy.get('input[name="amount"]').type(1).should('have.value', 1);
 
-      // Input nama akun
-      const randCharacters = commonFunction.randomChar();
-      cy.get('input[name="input_akun_pemilik"]').type(randCharacters).should('have.value', randCharacters);
+      // Apabila verification POA sudah bank, maka skip input info bank dan lanjut klik checkbox
+      cy.get('label[for="akun-pemilik"]')
+        .parent()
+        .find('input')
+        .then(($el) => {
+          if (!$el.attr('readonly')) {
+            // Input nama akun
+            const randCharacters = commonFunction.randomChar();
+            cy.get('input[name="input_akun_pemilik"]').type(randCharacters).should('have.value', randCharacters);
 
-      // Input nomor akun
-      const randNumber = commonFunction.randomNumberID();
-      cy.get('input[name="input_nomor_akun"]').type(randNumber).should('have.value', randNumber);
+            // Input nomor akun
+            const randNumber = commonFunction.randomNumberID();
+            cy.get('input[name="input_nomor_akun"]').type(randNumber).should('have.value', randNumber);
 
-      // Input nama bank
-      const randCharacters2 = commonFunction.randomChar();
-      cy.get('input[name="selectBank"]').type(randCharacters2).should('have.value', randCharacters2);
+            // Input nama bank
+            const randCharacters2 = commonFunction.randomChar();
+            cy.get('input[name="selectBank"]').type(randCharacters2).should('have.value', randCharacters2);
+          }
+        });
 
       // Input checkbox
       cy.get('input[type="checkbox"]').click();
@@ -136,17 +144,25 @@ describe('Withdraw Balance', () => {
       // Input amount (input $1 saja)
       cy.get('input[name="amount"]').type(1).should('have.value', 1);
 
-      // Input nama akun
-      const randCharacters = commonFunction.randomChar();
-      cy.get('input[name="input_akun_pemilik"]').type(randCharacters).should('have.value', randCharacters);
+      // Apabila verification POA sudah bank, maka skip input info bank dan lanjut klik checkbox
+      cy.get('label[for="akun-pemilik"]')
+        .parent()
+        .find('input')
+        .then(($el) => {
+          if (!$el.attr('readonly')) {
+            // Input nama akun
+            const randCharacters = commonFunction.randomChar();
+            cy.get('input[name="input_akun_pemilik"]').type(randCharacters).should('have.value', randCharacters);
 
-      // Input nomor akun
-      const randNumber = commonFunction.randomNumberID();
-      cy.get('input[name="input_nomor_akun"]').type(randNumber).should('have.value', randNumber);
+            // Input nomor akun
+            const randNumber = commonFunction.randomNumberID();
+            cy.get('input[name="input_nomor_akun"]').type(randNumber).should('have.value', randNumber);
 
-      // Input nama bank
-      const randCharacters2 = commonFunction.randomChar();
-      cy.get('input[name="selectBank"]').type(randCharacters2).should('have.value', randCharacters2);
+            // Input nama bank
+            const randCharacters2 = commonFunction.randomChar();
+            cy.get('input[name="selectBank"]').type(randCharacters2).should('have.value', randCharacters2);
+          }
+        });
 
       // Input checkbox
       cy.get('input[type="checkbox"]').click();
