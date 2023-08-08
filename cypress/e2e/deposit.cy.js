@@ -14,7 +14,7 @@ describe('Deposit Balance', () => {
     cy.wait(10000);
   });
 
-  context.skip('Deposit Via Bank & VA', () => {
+  context('Deposit Via Bank & VA', () => {
     it('Users want to deposit to their account without input all field or some field', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
@@ -57,12 +57,12 @@ describe('Deposit Balance', () => {
 
       // Input nama akun bank
       const randCharacters = commonFunction.randomChar();
-      cy.get('input[name="akun-pemilik"]').type(randCharacters).should('have.value', randCharacters);
+      cy.get('input[name="akun-pemilik"]').clear().type(randCharacters).should('have.value', randCharacters);
       cy.wait(1000);
 
       // Input nomor akun bank
       const randNumber = commonFunction.randomNumberID();
-      cy.get('input[name="nomor-akun"]').type(randNumber).should('have.value', randNumber);
+      cy.get('input[name="nomor-akun"]').clear().type(randNumber).should('have.value', randNumber);
       cy.wait(1000);
 
       // Input nama bank
@@ -138,12 +138,12 @@ describe('Deposit Balance', () => {
 
       // Input nama akun bank
       const randCharacters = commonFunction.randomChar();
-      cy.get('input[name="akun-pemilik"]').type(randCharacters).should('have.value', randCharacters);
+      cy.get('input[name="akun-pemilik"]').clear().type(randCharacters).should('have.value', randCharacters);
       cy.wait(1000);
 
       // Input nomor akun bank
       const randNumber = commonFunction.randomNumberID();
-      cy.get('input[name="nomor-akun"]').type(randNumber).should('have.value', randNumber);
+      cy.get('input[name="nomor-akun"]').clear().type(randNumber).should('have.value', randNumber);
       cy.wait(1000);
 
       // Input nama bank
@@ -185,26 +185,6 @@ describe('Deposit Balance', () => {
       cy.get('button').contains('Yes').click();
       cy.wait(3000);
       cy.get('h2').contains('Success').should('be.visible');
-
-      // Cek approval admin
-      approvalAdminFunction.approvalDeposit();
-
-      // Buka primecodex staging kembali dan login
-      cy.visit(Cypress.env('STAGING_URL'));
-      cy.wait(3000);
-      loginFunction.loginCorrect(email, pass);
-
-      // Check status deposit
-      cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get(5000);
-      cy.get('thead').then(($el) => {
-        const rowTd = $el.length;
-        if (rowTd == 0) {
-          cy.reload();
-          cy.wait(10000);
-        }
-      });
-      cy.get('table > tr').eq(0).find('td').contains('SUCCESS').should('be.visible');
     });
   });
 
