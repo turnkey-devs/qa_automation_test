@@ -6,3 +6,4 @@ index.json
 /cypress/videos
 /cypress/results/
 public
+/cypress/e2e/testAPI.cy.js

@@ -1,8 +1,9 @@
-import { loginFunc, commonObject, approvalAdmin } from './../component/classFunction';
+import { loginFunc, commonObject, approvalAdmin, ApproveAdminFromAPI } from './../component/classFunction';
 
 const loginFunction = new loginFunc();
 const commonFunction = new commonObject();
 const approvalAdminFunction = new approvalAdmin();
+const approvalAdminFromAPI = new ApproveAdminFromAPI();
 
 describe('Withdraw Balance', () => {
   const email = Cypress.env('EMAIL_VALID');
@@ -169,22 +170,33 @@ describe('Withdraw Balance', () => {
       cy.get('input[type="checkbox"]').should('be.checked');
       cy.wait(1000);
 
+      // Intercept API untuk ambil Payment ID
+      cy.intercept('POST', 'https://staging-orbit.turnkey.id/api/v2/payment/withdraw').as('getPaymentID');
+
       // Klik tombol request withdraw
       cy.get('button').contains('Request Withdraw').click();
       cy.wait(2000);
       cy.get('h1').contains('Withdrawal Bank').should('be.visible');
 
-      // Klik continue dan yes
+      // Klik continue
       cy.get('button').contains('Continue').click();
       cy.get(2000);
       cy.get('button').contains('Yes').click();
       cy.wait(5000);
-      cy.get('h2').contains('Success').should('be.visible');
-      cy.get('button').contains('Oke').click();
-      cy.wait(3000);
 
-      // Cek approval admin
-      approvalAdminFunction.approvalWithdrawal();
+      // Check payment ID
+      cy.wait('@getPaymentID').then(($res) => {
+        const paymentID = $res.response.body.data.payment.id;
+        const lastBalance = $res.response.body.data.payment.account.last_balance;
+
+        // Cek approval admin lewat API
+        approvalAdminFromAPI.approvePayment(paymentID, lastBalance);
+
+        // Click Oke
+        cy.get('h2').contains('Success').should('be.visible');
+        cy.get('button').contains('Oke').click();
+        cy.wait(5000);
+      });
     });
   });
 
@@ -343,6 +355,9 @@ describe('Withdraw Balance', () => {
       cy.get('input[type="checkbox"]').should('be.checked');
       cy.wait(1000);
 
+      // Intercept API untuk ambil Payment ID
+      cy.intercept('POST', 'https://staging-orbit.turnkey.id/api/v2/payment/withdraw').as('getPaymentID');
+
       // Klik tombol request withdraw
       cy.get('button').contains('Request Withdraw').click();
       cy.wait(2000);
@@ -353,12 +368,20 @@ describe('Withdraw Balance', () => {
       cy.get(2000);
       cy.get('button').contains('Yes').click();
       cy.wait(5000);
-      cy.get('h2').contains('Your request will be processed').should('be.visible');
-      cy.get('button').contains('Oke').click();
-      cy.wait(3000);
 
-      // Cek approval admin
-      approvalAdminFunction.approvalWithdrawal();
+      // Check payment ID
+      cy.wait('@getPaymentID').then(($res) => {
+        const paymentID = $res.response.body.data.payment.id;
+        const lastBalance = $res.response.body.data.payment.account.last_balance;
+
+        // Cek approval admin lewat API
+        approvalAdminFromAPI.approvePayment(paymentID, lastBalance);
+
+        // Click Oke
+        cy.get('h2').contains('Your request will be processed').should('be.visible');
+        cy.get('button').contains('Oke').click();
+        cy.wait(3000);
+      });
     });
   });
 });
