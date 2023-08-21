@@ -59,7 +59,7 @@ describe('Withdraw Balance', () => {
 
       //  Input akun yang ingin di withdraw
       cy.wait(2000);
-      cy.get('select[name="select-account"] > option').then(($el) => {
+      cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
         commonFunction.randomDropdownValue('select[name="select-account"]', $el);
       });
       cy.wait(2000);
@@ -134,7 +134,7 @@ describe('Withdraw Balance', () => {
 
       //  Input akun yang ingin di withdraw
       cy.wait(2000);
-      cy.get('select[name="select-account"] > option').then(($el) => {
+      cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
         commonFunction.randomDropdownValue('select[name="select-account"]', $el);
       });
       cy.wait(2000);
@@ -171,7 +171,7 @@ describe('Withdraw Balance', () => {
       cy.wait(1000);
 
       // Intercept API untuk ambil Payment ID
-      cy.intercept('POST', 'https://staging-orbit.turnkey.id/api/v2/payment/withdraw').as('getPaymentID');
+      cy.intercept('POST', `${Cypress.env('BASE_API_STAGING')}/api/v2/payment/withdraw`).as('getPaymentID');
 
       // Klik tombol request withdraw
       cy.get('button').contains('Request Withdraw').click();
@@ -256,7 +256,7 @@ describe('Withdraw Balance', () => {
 
       //  Input akun yang ingin di withdraw
       cy.wait(2000);
-      cy.get('select[name="select-account"] > option').then(($el) => {
+      cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
         commonFunction.randomDropdownValue('select[name="select-account"]', $el);
       });
       cy.wait(2000);
@@ -313,7 +313,7 @@ describe('Withdraw Balance', () => {
 
       //  Input akun yang ingin di withdraw
       cy.wait(2000);
-      cy.get('select[name="select-account"] > option').then(($el) => {
+      cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
         commonFunction.randomDropdownValue('select[name="select-account"]', $el);
       });
       cy.wait(2000);
@@ -356,7 +356,7 @@ describe('Withdraw Balance', () => {
       cy.wait(1000);
 
       // Intercept API untuk ambil Payment ID
-      cy.intercept('POST', 'https://staging-orbit.turnkey.id/api/v2/payment/withdraw').as('getPaymentID');
+      cy.intercept('POST', `${Cypress.env('BASE_API_STAGING')}/api/v2/payment/withdraw`).as('getPaymentID');
 
       // Klik tombol request withdraw
       cy.get('button').contains('Request Withdraw').click();

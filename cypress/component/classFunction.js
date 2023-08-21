@@ -17,11 +17,7 @@ export class loginFunc {
 export class commonObject {
   randomDropdownValue(selectPath, element) {
     // Logika untuk random value dropdown
-    let randNumber = Math.floor(Math.random() * element.length);
-
-    if (randNumber <= 0 || randNumber === null || randNumber === undefined || randNumber === '' || isNaN(randNumber) === true) {
-      randNumber = 1;
-    }
+    const randNumber = Math.floor(Math.random() * element.length);
 
     cy.wait(5000);
 
@@ -103,9 +99,9 @@ export class commonObject {
         const textBalance = $txt.text().split(' ');
         const textBalanceNumber = parseFloat(textBalance[textBalance.length - 1]);
 
-        if (textBalanceNumber == 0) {
+        if (textBalanceNumber == 0 || textBalanceNumber <= 1) {
           //  Input akun yang ingin di withdraw kembali
-          cy.get('select[name="select-account"] > option').then(($el) => {
+          cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
             this.randomDropdownValue('select[name="select-account"]', $el);
           });
           cy.wait(2000);
