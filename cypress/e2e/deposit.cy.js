@@ -332,7 +332,7 @@ describe('Deposit Balance', () => {
 
       // Input akun yang ingin di deposit
       cy.wait(2000);
-      cy.get('select[name="select-account"] > select[name="select-account"] > option[name="select-account-value"]').then(($el) => {
+      cy.get('select[name="select-account"] > option[name="select-account-value"]').then(($el) => {
         commonFunction.randomDropdownValue('select[name="select-account"]', $el);
       });
       cy.wait(2000);
