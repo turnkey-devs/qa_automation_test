@@ -1,9 +1,11 @@
-import { loginFunc, commonObject, approvalAdmin, ApproveAdminFromAPI } from './../component/classFunction';
+import { loginFunc, commonObject, approvalAdmin, ApproveAdminFromAPI, WithdrawCrypto, WithdrawLocal } from './../component/classFunction';
 
 const loginFunction = new loginFunc();
 const commonFunction = new commonObject();
 const approvalAdminFunction = new approvalAdmin();
 const approvalAdminFromAPI = new ApproveAdminFromAPI();
+const withdrawCrypto = new WithdrawCrypto();
+const withdrawLocal = new WithdrawLocal();
 
 describe('Withdraw Balance', () => {
   const email = Cypress.env('EMAIL_VALID');
@@ -57,70 +59,8 @@ describe('Withdraw Balance', () => {
       cy.wait(3000);
       cy.get('h1').contains('Withdraw').should('be.visible');
 
-      //  Input akun yang ingin di withdraw
-      cy.wait(2000);
-      cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
-        commonFunction.randomDropdownValue('select[name="select-account"]', $el);
-      });
-      cy.wait(2000);
-
-      //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
-      commonFunction.checkWithdrawlBalance();
-
-      // Input amount (input $1 saja)
-      cy.get('input[name="amount"]').type(1).should('have.value', 1);
-
-      // Apabila verification POA sudah bank, maka skip input info bank dan lanjut klik checkbox
-      cy.get('label[for="akun-pemilik"]')
-        .parent()
-        .find('input')
-        .then(($el) => {
-          if (!$el.attr('readonly')) {
-            // Input nama akun
-            const randCharacters = commonFunction.randomChar();
-            cy.get('input[name="input_akun_pemilik"]').type(randCharacters).should('have.value', randCharacters);
-
-            // Input nomor akun
-            const randNumber = commonFunction.randomNumberID();
-            cy.get('input[name="input_nomor_akun"]').type(randNumber).should('have.value', randNumber);
-
-            // Input nama bank
-            const randCharacters2 = commonFunction.randomChar();
-            cy.get('input[name="selectBank"]').type(randCharacters2).should('have.value', randCharacters2);
-          }
-        });
-
-      // Input checkbox
-      cy.get('input[type="checkbox"]').click();
-      cy.get('input[type="checkbox"]').should('be.checked');
-      cy.wait(1000);
-
-      // Klik tombol request withdraw
-      cy.get('button').contains('Request Withdraw').click();
-      cy.wait(2000);
-      cy.get('h1').contains('Withdrawal Bank').should('be.visible');
-
-      // Klik continue dan yes
-      cy.get('button').contains('Continue').click();
-      cy.get(2000);
-      cy.get('button').contains('Yes').click();
-      cy.wait(5000);
-      cy.get('h2').contains('Success').should('be.visible');
-      cy.get('button').contains('Oke').click();
-      cy.wait(3000);
-
-      // Check status verified identity dan klik cancel
-      cy.get('h1').contains('History Payment').scrollIntoView();
-      cy.get(10000);
-      cy.reload();
-      cy.wait(5000);
-      cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
-      cy.wait(1000);
-      cy.get('h2').contains('Do you want to cancel the withdrawal?').should('be.visible');
-      cy.get('button').contains('OK').click();
-      cy.wait(4000);
-      cy.get('h2').contains('Success').should('be.visible');
-      cy.get('button').contains('OK').click();
+      // Input data sesuai withdraw dan cancel setelah create
+      withdrawLocal.withdrawLocalCancel();
     });
 
     it('Users want to withdraw with local method', () => {
@@ -132,71 +72,8 @@ describe('Withdraw Balance', () => {
       cy.wait(3000);
       cy.get('h1').contains('Withdraw').should('be.visible');
 
-      //  Input akun yang ingin di withdraw
-      cy.wait(2000);
-      cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
-        commonFunction.randomDropdownValue('select[name="select-account"]', $el);
-      });
-      cy.wait(2000);
-
-      //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
-      commonFunction.checkWithdrawlBalance();
-
-      // Input amount (input $1 saja)
-      cy.get('input[name="amount"]').type(1).should('have.value', 1);
-
-      // Apabila verification POA sudah bank, maka skip input info bank dan lanjut klik checkbox
-      cy.get('label[for="akun-pemilik"]')
-        .parent()
-        .find('input')
-        .then(($el) => {
-          if (!$el.attr('readonly')) {
-            // Input nama akun
-            const randCharacters = commonFunction.randomChar();
-            cy.get('input[name="input_akun_pemilik"]').type(randCharacters).should('have.value', randCharacters);
-
-            // Input nomor akun
-            const randNumber = commonFunction.randomNumberID();
-            cy.get('input[name="input_nomor_akun"]').type(randNumber).should('have.value', randNumber);
-
-            // Input nama bank
-            const randCharacters2 = commonFunction.randomChar();
-            cy.get('input[name="selectBank"]').type(randCharacters2).should('have.value', randCharacters2);
-          }
-        });
-
-      // Input checkbox
-      cy.get('input[type="checkbox"]').click();
-      cy.get('input[type="checkbox"]').should('be.checked');
-      cy.wait(1000);
-
-      // Intercept API untuk ambil Payment ID
-      cy.intercept('POST', `${Cypress.env('BASE_API_STAGING')}/api/v2/payment/withdraw`).as('getPaymentID');
-
-      // Klik tombol request withdraw
-      cy.get('button').contains('Request Withdraw').click();
-      cy.wait(2000);
-      cy.get('h1').contains('Withdrawal Bank').should('be.visible');
-
-      // Klik continue
-      cy.get('button').contains('Continue').click();
-      cy.get(2000);
-      cy.get('button').contains('Yes').click();
-      cy.wait(5000);
-
-      // Check payment ID
-      cy.wait('@getPaymentID').then(($res) => {
-        const paymentID = $res.response.body.data.payment.id;
-        const lastBalance = $res.response.body.data.payment.account.last_balance;
-
-        // Cek approval admin lewat API
-        approvalAdminFromAPI.approvePayment(paymentID, lastBalance);
-
-        // Click Oke
-        cy.get('h2').contains('Success').should('be.visible');
-        cy.get('button').contains('Oke').click();
-        cy.wait(5000);
-      });
+      // Input sesuai data request withdraw local dan approve admin lewat API
+      withdrawLocal.withdrawLocalAcceptAPI();
     });
   });
 
@@ -254,48 +131,8 @@ describe('Withdraw Balance', () => {
       cy.get('a[href="/withdraw-crypto"]').click();
       cy.wait(4000);
 
-      //  Input akun yang ingin di withdraw
-      cy.wait(2000);
-      cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
-        commonFunction.randomDropdownValue('select[name="select-account"]', $el);
-      });
-      cy.wait(2000);
-
-      //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
-      commonFunction.checkWithdrawlBalance();
-
-      // Input amount (input $1 saja)
-      cy.get('input[name="amount"]').type(1).should('have.value', 1);
-
-      // Input wallet address
-      const randCharacters = commonFunction.randomChar();
-      cy.get('input[placeholder="Your USDT address"]').type(randCharacters).should('have.value', randCharacters);
-
-      // Input server network
-      cy.get('label')
-        .contains('Network')
-        .parent()
-        .find('select > option')
-        .then(($el) => {
-          // Logika untuk random value dropdown
-          let randNumber = Math.floor(Math.random() * $el.length);
-          if (randNumber == 0) {
-            randNumber = randNumber + 1;
-          }
-
-          // Pilih items dropdown
-          const valueDrop = $el[randNumber].text;
-          cy.get('select').eq(1).select(valueDrop);
-          cy.wait(1000);
-        });
-
-      // Input field file dengan value yang tidak sesuai
-      cy.get('input[type="file"]').selectFile('cypress/fixtures/pdfExample.pdf');
-      cy.wait(2000);
-
-      // Assert pop up error muncul
-      cy.get('h2').contains('Your file is not an image').should('be.visible');
-      cy.get('button').contains('OK').click();
+      // Input data request withdraw invalid file
+      withdrawCrypto.withdrawCryptoInvalidFile();
     });
 
     it('Users want to withdraw their balance with crypto method', () => {
@@ -311,77 +148,8 @@ describe('Withdraw Balance', () => {
       cy.get('a[href="/withdraw-crypto"]').click();
       cy.wait(4000);
 
-      //  Input akun yang ingin di withdraw
-      cy.wait(2000);
-      cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
-        commonFunction.randomDropdownValue('select[name="select-account"]', $el);
-      });
-      cy.wait(2000);
-
-      //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
-      commonFunction.checkWithdrawlBalance();
-
-      // Input amount (input $1 saja)
-      cy.get('input[name="amount"]').type(1).should('have.value', 1);
-
-      // Input wallet address
-      const randCharacters = commonFunction.randomChar();
-      cy.get('input[placeholder="Your USDT address"]').type(randCharacters).should('have.value', randCharacters);
-
-      // Input server network
-      cy.get('label')
-        .contains('Network')
-        .parent()
-        .find('select > option')
-        .then(($el) => {
-          // Logika untuk random value dropdown
-          let randNumber = Math.floor(Math.random() * $el.length);
-          if (randNumber == 0) {
-            randNumber = randNumber + 1;
-          }
-
-          // Pilih items dropdown
-          const valueDrop = $el[randNumber].text;
-          cy.get('select').eq(1).select(valueDrop);
-          cy.wait(1000);
-        });
-
-      // Input field file dengan value yang sesuai
-      cy.get('input[type="file"]').selectFile('cypress/fixtures/PicExample.png');
-      cy.wait(2000);
-
-      // Input checkbox
-      cy.get('input[type="checkbox"]').click();
-      cy.get('input[type="checkbox"]').should('be.checked');
-      cy.wait(1000);
-
-      // Intercept API untuk ambil Payment ID
-      cy.intercept('POST', `${Cypress.env('BASE_API_STAGING')}/api/v2/payment/withdraw`).as('getPaymentID');
-
-      // Klik tombol request withdraw
-      cy.get('button').contains('Request Withdraw').click();
-      cy.wait(2000);
-      cy.get('h1').contains('Withdrawal Crypto').should('be.visible');
-
-      // Klik continue dan yes
-      cy.get('button').contains('Continue').click();
-      cy.get(2000);
-      cy.get('button').contains('Yes').click();
-      cy.wait(5000);
-
-      // Check payment ID
-      cy.wait('@getPaymentID').then(($res) => {
-        const paymentID = $res.response.body.data.payment.id;
-        const lastBalance = $res.response.body.data.payment.account.last_balance;
-
-        // Cek approval admin lewat API
-        approvalAdminFromAPI.approvePayment(paymentID, lastBalance);
-
-        // Click Oke
-        cy.get('h2').contains('Your request will be processed').should('be.visible');
-        cy.get('button').contains('Oke').click();
-        cy.wait(3000);
-      });
+      // Input data request withdraw crypto dan approve admin lewat API
+      withdrawCrypto.withdrawCryptoAcceptAPI();
     });
   });
 });

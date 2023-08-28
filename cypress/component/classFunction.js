@@ -323,3 +323,379 @@ export class ApproveAdminFromAPI {
     });
   }
 }
+
+export class WithdrawCrypto {
+  withdrawCryptoAcceptAPI() {
+    const commonFunction = new commonObject();
+    const approvalAdminFromAPI = new ApproveAdminFromAPI();
+
+    //  Input akun yang ingin di withdraw
+    cy.wait(2000);
+    cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
+      commonFunction.randomDropdownValue('select[name="select-account"]', $el);
+    });
+    cy.wait(2000);
+
+    //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
+    commonFunction.checkWithdrawlBalance();
+
+    // Input amount (input $1 saja)
+    cy.get('input[name="amount"]').type(1).should('have.value', 1);
+
+    // Input wallet address
+    const randCharacters = commonFunction.randomChar();
+    cy.get('input[placeholder="Your USDT address"]').type(randCharacters).should('have.value', randCharacters);
+
+    // Input server network
+    cy.get('label')
+      .contains('Network')
+      .parent()
+      .find('select > option')
+      .then(($el) => {
+        // Logika untuk random value dropdown
+        let randNumber = Math.floor(Math.random() * $el.length);
+        if (randNumber == 0) {
+          randNumber = randNumber + 1;
+        }
+
+        // Pilih items dropdown
+        const valueDrop = $el[randNumber].text;
+        cy.get('select').eq(1).select(valueDrop);
+        cy.wait(1000);
+      });
+
+    // Input field file dengan value yang sesuai
+    cy.get('input[type="file"]').selectFile('cypress/fixtures/PicExample.png');
+    cy.wait(2000);
+
+    // Input checkbox
+    cy.get('input[type="checkbox"]').click();
+    cy.get('input[type="checkbox"]').should('be.checked');
+    cy.wait(1000);
+
+    // Klik tombol request withdraw
+    cy.get('button').contains('Request Withdraw').click();
+    cy.wait(2000);
+    cy.get('h1').contains('Withdrawal Crypto').should('be.visible');
+
+    // Intercept API untuk ambil withdraw payment ID
+    cy.intercept('POST', `${Cypress.env('BASE_API_STAGING')}/api/v2/payment/withdraw`).as('getPaymentID');
+
+    // Klik continue dan yes
+    cy.get('button').contains('Continue').click();
+    cy.get(2000);
+    cy.get('button').contains('Yes').click();
+    cy.wait(5000);
+
+    cy.wait('@getPaymentID').then(($res) => {
+      cy.log($res);
+      const statusCodeAPI = $res.response.statusCode;
+
+      // Logic apabila status API tidak sesuai
+      if (statusCodeAPI == 400 || statusCodeAPI == 401 || statusCodeAPI == 402 || statusCodeAPI == 403 || statusCodeAPI == 404 || statusCodeAPI == 500) {
+        cy.reload();
+        cy.wait(5000);
+
+        // Input data withdraw lagi
+        this.withdrawCryptoAcceptAPI();
+      } else {
+        const paymentID = $res.response.body.data.payment.id;
+        const lastBalance = $res.response.body.data.payment.account.last_balance;
+
+        // Cek approval admin lewat API
+        approvalAdminFromAPI.approvePayment(paymentID, lastBalance);
+
+        cy.get('h2').contains('Your request will be processed').should('be.visible');
+        cy.get('button').contains('Oke').click();
+        cy.wait(3000);
+      }
+    });
+  }
+
+  withdrawCryptoInvalidFile() {
+    const commonFunction = new commonObject();
+
+    //  Input akun yang ingin di withdraw
+    cy.wait(2000);
+    cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
+      commonFunction.randomDropdownValue('select[name="select-account"]', $el);
+    });
+    cy.wait(2000);
+
+    //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
+    commonFunction.checkWithdrawlBalance();
+
+    // Input amount (input $1 saja)
+    cy.get('input[name="amount"]').type(1).should('have.value', 1);
+
+    // Input wallet address
+    const randCharacters = commonFunction.randomChar();
+    cy.get('input[placeholder="Your USDT address"]').type(randCharacters).should('have.value', randCharacters);
+
+    // Input server network
+    cy.get('label')
+      .contains('Network')
+      .parent()
+      .find('select > option')
+      .then(($el) => {
+        // Logika untuk random value dropdown
+        let randNumber = Math.floor(Math.random() * $el.length);
+        if (randNumber == 0) {
+          randNumber = randNumber + 1;
+        }
+
+        // Pilih items dropdown
+        const valueDrop = $el[randNumber].text;
+        cy.get('select').eq(1).select(valueDrop);
+        cy.wait(1000);
+      });
+
+    // Input field file dengan value yang tidak sesuai
+    cy.get('input[type="file"]').selectFile('cypress/fixtures/pdfExample.pdf');
+    cy.wait(2000);
+
+    // Assert pop up error muncul
+    cy.get('h2').contains('Your file is not an image').should('be.visible');
+    cy.get('button').contains('OK').click();
+  }
+}
+
+export class WithdrawLocal {
+  withdrawLocalAcceptAPI() {
+    const commonFunction = new commonObject();
+    const approvalAdminFromAPI = new ApproveAdminFromAPI();
+
+    //  Input akun yang ingin di withdraw
+    cy.wait(2000);
+    cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
+      commonFunction.randomDropdownValue('select[name="select-account"]', $el);
+    });
+    cy.wait(2000);
+
+    //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
+    commonFunction.checkWithdrawlBalance();
+
+    // Input amount (input $1 saja)
+    cy.get('input[name="amount"]').type(1).should('have.value', 1);
+
+    // Apabila verification POA sudah bank, maka skip input info bank dan lanjut klik checkbox
+    cy.get('label[for="akun-pemilik"]')
+      .parent()
+      .find('input')
+      .then(($el) => {
+        if (!$el.attr('readonly')) {
+          // Input nama akun
+          const randCharacters = commonFunction.randomChar();
+          cy.get('input[name="input_akun_pemilik"]').type(randCharacters).should('have.value', randCharacters);
+
+          // Input nomor akun
+          const randNumber = commonFunction.randomNumberID();
+          cy.get('input[name="input_nomor_akun"]').type(randNumber).should('have.value', randNumber);
+
+          // Input nama bank
+          const randCharacters2 = commonFunction.randomChar();
+          cy.get('input[name="selectBank"]').type(randCharacters2).should('have.value', randCharacters2);
+        }
+      });
+
+    // Input checkbox
+    cy.get('input[type="checkbox"]').click();
+    cy.get('input[type="checkbox"]').should('be.checked');
+    cy.wait(1000);
+
+    // Intercept API untuk ambil withdraw payment ID
+    cy.intercept('POST', `${Cypress.env('BASE_API_STAGING')}/api/v2/payment/withdraw`).as('getPaymentID');
+
+    // Klik tombol request withdraw
+    cy.get('button').contains('Request Withdraw').click();
+    cy.wait(2000);
+    cy.get('h1').contains('Withdrawal Bank').should('be.visible');
+
+    // Klik continue dan yes
+    cy.get('button').contains('Continue').click();
+    cy.get(2000);
+    cy.get('button').contains('Yes').click();
+    cy.wait(5000);
+
+    // Check payment ID
+    cy.wait('@getPaymentID').then(($res) => {
+      cy.log($res);
+      const statusCodeAPI = $res.response.statusCode;
+
+      if (statusCodeAPI == 400 || statusCodeAPI == 401 || statusCodeAPI == 402 || statusCodeAPI == 403 || statusCodeAPI == 404 || statusCodeAPI == 500) {
+        cy.reload();
+        cy.wait(5000);
+
+        // Input data withdraw lagi
+        this.withdrawLocalAcceptAPI();
+      } else {
+        const paymentID = $res.response.body.data.payment.id;
+        const lastBalance = $res.response.body.data.payment.account.last_balance;
+
+        // Cek approval admin lewat API
+        approvalAdminFromAPI.approvePayment(paymentID, lastBalance);
+
+        cy.get('h2').contains('Success').should('be.visible');
+        cy.get('button').contains('Oke').click();
+        cy.wait(3000);
+      }
+    });
+  }
+
+  withdrawLocalCancel() {
+    const commonFunction = new commonObject();
+
+    //  Input akun yang ingin di withdraw
+    cy.wait(2000);
+    cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
+      commonFunction.randomDropdownValue('select[name="select-account"]', $el);
+    });
+    cy.wait(2000);
+
+    //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
+    commonFunction.checkWithdrawlBalance();
+
+    // Input amount (input $1 saja)
+    cy.get('input[name="amount"]').type(1).should('have.value', 1);
+
+    // Apabila verification POA sudah bank, maka skip input info bank dan lanjut klik checkbox
+    cy.get('label[for="akun-pemilik"]')
+      .parent()
+      .find('input')
+      .then(($el) => {
+        if (!$el.attr('readonly')) {
+          // Input nama akun
+          const randCharacters = commonFunction.randomChar();
+          cy.get('input[name="input_akun_pemilik"]').type(randCharacters).should('have.value', randCharacters);
+
+          // Input nomor akun
+          const randNumber = commonFunction.randomNumberID();
+          cy.get('input[name="input_nomor_akun"]').type(randNumber).should('have.value', randNumber);
+
+          // Input nama bank
+          const randCharacters2 = commonFunction.randomChar();
+          cy.get('input[name="selectBank"]').type(randCharacters2).should('have.value', randCharacters2);
+        }
+      });
+
+    // Input checkbox
+    cy.get('input[type="checkbox"]').click();
+    cy.get('input[type="checkbox"]').should('be.checked');
+    cy.wait(1000);
+
+    // Klik tombol request withdraw
+    cy.get('button').contains('Request Withdraw').click();
+    cy.wait(2000);
+    cy.get('h1').contains('Withdrawal Bank').should('be.visible');
+
+    // Klik continue dan yes
+    cy.get('button').contains('Continue').click();
+    cy.get(2000);
+    cy.get('button').contains('Yes').click();
+    cy.wait(5000);
+    cy.get('h2').contains('Success').should('be.visible');
+    cy.get('button').contains('Oke').click();
+    cy.wait(5000);
+
+    // Check status verified identity dan klik cancel
+    cy.get('h1').contains('History Payment').scrollIntoView();
+    cy.get(10000);
+
+    // Apabila table element tidak muncul, refresh
+    cy.get('h1')
+      .contains('History Payment')
+      .parent()
+      .then(($el) => {
+        if ($el.find('div > table > tr').length < 1) {
+          cy.reload();
+          cy.get('h1').contains('History Payment').scrollIntoView();
+          cy.wait(10000);
+        }
+      });
+
+    cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
+    cy.wait(1000);
+    cy.get('h2').contains('Do you want to cancel the withdrawal?').should('be.visible');
+    cy.get('button').contains('OK').click();
+    cy.wait(5000);
+    cy.get('h2').contains('Success').should('be.visible');
+    cy.get('button').contains('OK').click();
+  }
+}
+
+export class RegistHandleAPIFromAdmin {
+  deleteRegistAccountUser(accountID, userID) {
+    const endpointAccountDelete = `${Cypress.env('BASE_API_BETA')}/api/v2/account/${accountID}`;
+    const endpointUserDelete = `${Cypress.env('BASE_API_BETA')}/api/v2/user/${userID}`;
+
+    const bodyLogin = {
+      email: Cypress.env('EMAIL_ADMIN'),
+      password: Cypress.env('PASS_ADMIN'),
+    };
+
+    const bodyAppToken = {
+      appId: '24',
+      name: 'Codex-Greylabel',
+      broker: {},
+      link: {},
+    };
+
+    cy.request({
+      method: 'POST',
+      url: `${Cypress.env('BASE_API_STAGING')}/api/v2/admin/app-token`,
+      headers: {
+        'x-pem-key': Cypress.env('PEM_KEY'),
+      },
+      failOnStatusCode: false,
+      body: bodyAppToken,
+    }).then(($resToken) => {
+      cy.log($resToken);
+      const appToken = $resToken.body.data.token;
+
+      cy.request({
+        method: 'POST',
+        url: `${Cypress.env('BASE_API_BETA')}/api/v2/auth/admin/login`,
+        headers: {
+          'X-App-Token': appToken,
+          Accept: 'application/json',
+        },
+        failOnStatusCode: false,
+        body: bodyLogin,
+      }).then(($res) => {
+        const userToken = $res.body.data.token;
+
+        // API Delete New Account
+        cy.request({
+          method: 'DELETE',
+          url: endpointAccountDelete,
+          headers: {
+            'X-App-Token': appToken,
+            'X-User-Token': userToken,
+          },
+          failOnStatusCode: false,
+        }).then(($resDelAcc) => {
+          cy.log($resDelAcc);
+          const statusMessage = $resDelAcc.body.status;
+
+          expect(statusMessage).to.equal('SUCCESS');
+        });
+
+        // API Delete New User
+        cy.request({
+          method: 'DELETE',
+          url: endpointUserDelete,
+          headers: {
+            'X-App-Token': appToken,
+            'X-User-Token': userToken,
+          },
+          failOnStatusCode: false,
+        }).then(($resDelUsr) => {
+          cy.log($resDelUsr);
+          const statusMessage = $resDelUsr.body.status;
+
+          expect(statusMessage).to.equal('SUCCESS');
+        });
+      });
+    });
+  }
+}

@@ -1,6 +1,7 @@
-import { loginFunc, commonObject, approvalAdmin } from './../component/classFunction';
+import { loginFunc, commonObject, approvalAdmin, RegistHandleAPIFromAdmin } from './../component/classFunction';
 
 const commonFunction = new commonObject();
+const registAPIHandle = new RegistHandleAPIFromAdmin();
 
 describe('New Investors Register', () => {
   beforeEach(() => {
@@ -355,11 +356,24 @@ describe('New Investors Register', () => {
     cy.get('input[type="checkbox"]').eq(2).should('be.checked');
     cy.wait(1000);
 
+    // Get information from API regist
+    cy.intercept('POST', `${Cypress.env('BASE_API_BETA')}/api/v2/auth/register`).as('getRegistDetails');
+
     // Klik Open Account
     cy.get('button').contains('Open Account').click();
     cy.wait(3500);
 
     // Assert failed
     cy.get('h2').contains('Congratulations!').should('be.visible');
+
+    // Check API response details
+    cy.wait('@getRegistDetails').then(($res) => {
+      cy.log($res);
+      const accountID = $res.response.body.data.account.id;
+      const userID = $res.response.body.data.user.id;
+
+      // Delete akun dan user berdasarkan ID nya
+      registAPIHandle.deleteRegistAccountUser(accountID, userID);
+    });
   });
 });
