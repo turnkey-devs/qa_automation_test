@@ -8,7 +8,7 @@ describe('New Investors Register', () => {
     cy.viewport(1280, 720);
     cy.visit(Cypress.env('STAGING_URL'));
     cy.wait(3000);
-    cy.get('a').contains('Daftar').invoke('removeAttr', 'target').click();
+    cy.get('a').contains('Sign Up').invoke('removeAttr', 'target').click();
     cy.wait(10000);
   });
 
