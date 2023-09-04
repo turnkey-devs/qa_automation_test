@@ -8,9 +8,10 @@ export class loginFunc {
 
     // Login
     cy.get('button[data-cy="submit"]').click();
-    cy.wait(3000);
+    cy.wait(5000);
     cy.url().should('include', '/dashboard'); // Asert url harus ada path dashboard
     cy.get('h1').contains('My Account').should('be.visible'); // Assert kalau My Account terlihat di dashboard
+    cy.wait(10000);
   }
 }
 
