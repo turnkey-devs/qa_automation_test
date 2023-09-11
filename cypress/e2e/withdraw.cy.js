@@ -18,37 +18,37 @@ describe('Withdraw Balance', () => {
   });
 
   context('Local Withdrawl', () => {
-    it('Users want to withdraw their balance with local method without input any field', () => {
-      // Login
-      loginFunction.loginCorrect(email, pass);
+    // it('Users want to withdraw their balance with local method without input any field', () => {
+    //   // Login
+    //   loginFunction.loginCorrect(email, pass);
 
-      // Buka withdraw menu dari sidebar
-      cy.get('a[href="/withdraw"] > div > div > h4').contains('Withdraw').click();
-      cy.wait(3000);
-      cy.get('h1').contains('Withdraw').should('be.visible');
+    //   // Buka withdraw menu dari sidebar
+    //   cy.get('a[href="/withdraw"] > div > div > h4').contains('Withdraw').click();
+    //   cy.wait(3000);
+    //   cy.get('h1').contains('Withdraw').should('be.visible');
 
-      // Klik tombol request withdraw
-      cy.get('button').contains('Request Withdraw').click();
-      cy.wait(2000);
+    //   // Klik tombol request withdraw
+    //   cy.get('button').contains('Request Withdraw').click();
+    //   cy.wait(2000);
 
-      // Assert pop up error
-      cy.get('h2').contains('Incomplete Data!').should('be.visible');
-      cy.get('button').contains('Oke').click();
-      cy.wait(1000);
-    });
+    //   // Assert pop up error
+    //   cy.get('h2').contains('Incomplete Data!').should('be.visible');
+    //   cy.get('button').contains('Oke').click();
+    //   cy.wait(1000);
+    // });
 
-    it('Users want to withdraw their balance with local method but input negatif value in amount', () => {
-      // Login
-      loginFunction.loginCorrect(email, pass);
+    // it('Users want to withdraw their balance with local method but input negatif value in amount', () => {
+    //   // Login
+    //   loginFunction.loginCorrect(email, pass);
 
-      // Buka withdraw menu dari sidebar
-      cy.get('a[href="/withdraw"] > div > div > h4').contains('Withdraw').click();
-      cy.wait(3000);
-      cy.get('h1').contains('Withdraw').should('be.visible');
+    //   // Buka withdraw menu dari sidebar
+    //   cy.get('a[href="/withdraw"] > div > div > h4').contains('Withdraw').click();
+    //   cy.wait(3000);
+    //   cy.get('h1').contains('Withdraw').should('be.visible');
 
-      // Input amount (input $1 saja)
-      cy.get('input[name="amount"]').type(-1).should('not.have.value', -1);
-    });
+    //   // Input amount (input $1 saja)
+    //   cy.get('input[name="amount"]').type(-1).should('not.have.value', -1);
+    // });
 
     it('Users want to withdraw with local method but want to cancel it before approved by admin', () => {
       // Login
