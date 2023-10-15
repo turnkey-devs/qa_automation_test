@@ -367,6 +367,9 @@ export class Deposit {
     // Klik proceed deposit
     cy.get('button').contains('Request Deposit').click();
     cy.wait(2000);
+    cy.get('div').contains('Deposit Bank').should('be.visible');
+    cy.get('button').contains('Continue').click();
+    cy.get(2000);
     cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
 
     // Klik yes
@@ -392,11 +395,13 @@ export class Deposit {
       }
     });
     cy.wait(15000);
-    cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
-    cy.wait(1000);
+    cy.get('table > tr').eq(0).find('td > button').click(); // Click three dots in first row
+    cy.wait(1500);
+    cy.get('button').contains('Cancel Process').click(); // Click Cancel button
+    cy.wait(1500);
     cy.get('h2').contains('Do you want to cancel the deposit?').should('be.visible');
     cy.get('button').contains('OK').click();
-    cy.wait(10000);
+    cy.wait(15000);
     cy.get('h2').contains('Success').should('be.visible');
   }
 
@@ -441,6 +446,9 @@ export class Deposit {
     // Klik proceed deposit
     cy.get('button').contains('Request Deposit').click();
     cy.wait(2000);
+    cy.get('div').contains('Deposit Bank').should('be.visible');
+    cy.get('button').contains('Continue').click();
+    cy.get(2000);
     cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
 
     // Klik yes
@@ -511,11 +519,14 @@ export class Deposit {
     // Klik proceed deposit
     cy.get('button').contains('Request Deposit').click();
     cy.wait(2000);
+    cy.get('div').contains('Deposit Crypto').should('be.visible');
+    cy.get('button').contains('Continue').click();
+    cy.get(2000);
     cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
 
     // Klik yes
     cy.get('button').contains('Yes').click();
-    cy.wait(20000);
+    cy.wait(25000);
     cy.url().should('include', '/verify-time');
 
     // Buka account dashboard
@@ -533,8 +544,10 @@ export class Deposit {
       }
     });
     cy.wait(15000);
-    cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
-    cy.wait(1000);
+    cy.get('table > tr').eq(0).find('td > button').click(); // Click three dots in first row
+    cy.wait(1500);
+    cy.get('button').contains('Cancel Process').click(); // Click Cancel button
+    cy.wait(1500);
     cy.get('h2').contains('Do you want to cancel the deposit?').should('be.visible');
     cy.get('button').contains('OK').click();
     cy.wait(10000);
@@ -585,6 +598,9 @@ export class Deposit {
     // Klik proceed deposit
     cy.get('button').contains('Request Deposit').click();
     cy.wait(2000);
+    cy.get('div').contains('Deposit Bank').should('be.visible');
+    cy.get('button').contains('Continue').click();
+    cy.get(2000);
     cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
 
     // Klik yes
@@ -669,7 +685,7 @@ export class WithdrawCrypto {
     cy.get('button').contains('Continue').click();
     cy.get(2000);
     cy.get('button').contains('Yes').click();
-    cy.wait(10000);
+    cy.wait(25000);
 
     cy.wait('@getPaymentID').then(($res) => {
       cy.log($res);
@@ -694,6 +710,96 @@ export class WithdrawCrypto {
         cy.wait(3000);
       }
     });
+  }
+
+  withdrawCryptoCancel() {
+    const commonFunction = new commonObject();
+
+    //  Input akun yang ingin di withdraw
+    cy.wait(2000);
+    cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
+      commonFunction.randomDropdownValue('select[name="select-account"]', $el);
+    });
+    cy.wait(2000);
+
+    //  Cek balance apakah 0 atau tidak. Kalau 0 maka pilih akun lagi
+    commonFunction.checkWithdrawlBalance();
+
+    // Input amount (input $1 saja)
+    cy.get('input[name="amount"]').type(1).should('have.value', 1);
+
+    // Input wallet address
+    const randCharacters = commonFunction.randomChar();
+    cy.get('input[placeholder="Your USDT address"]').type(randCharacters).should('have.value', randCharacters);
+
+    // Input server network
+    cy.get('label')
+      .contains('Network')
+      .parent()
+      .find('select > option')
+      .then(($el) => {
+        // Logika untuk random value dropdown
+        let randNumber = Math.floor(Math.random() * $el.length);
+        if (randNumber == 0) {
+          randNumber = randNumber + 1;
+        }
+
+        // Pilih items dropdown
+        const valueDrop = $el[randNumber].text;
+        cy.get('select').eq(1).select(valueDrop);
+        cy.wait(1000);
+      });
+
+    // Input field file dengan value yang sesuai
+    cy.get('input[type="file"]').selectFile('cypress/fixtures/PicExample.png');
+    cy.wait(2000);
+
+    // Input checkbox
+    cy.get('input[type="checkbox"]').click();
+    cy.get('input[type="checkbox"]').should('be.checked');
+    cy.wait(1000);
+
+    // Klik tombol request withdraw
+    cy.get('button').contains('Request Withdraw').click();
+    cy.wait(2000);
+    cy.get('div').contains('Withdrawal Crypto').should('be.visible');
+
+    // Klik continue dan yes
+    cy.get('button').contains('Continue').click();
+    cy.get(2000);
+    cy.get('button').contains('Yes').click();
+    cy.wait(25000);
+
+    // Click Oke in pop up
+    cy.get('h2').contains('Your request will be processed').should('be.visible');
+    cy.get('button').contains('Oke').click();
+    cy.wait(10000);
+
+    // Check status verified identity dan klik cancel
+    cy.get('h1').contains('Payment History').scrollIntoView();
+    cy.get(10000);
+
+    // Apabila table element tidak muncul, refresh
+    cy.get('h1')
+      .contains('Payment History')
+      .parent()
+      .then(($el) => {
+        if ($el.find('div > table > tr').length < 1) {
+          cy.reload();
+          cy.get('h1').contains('Payment History').scrollIntoView();
+          cy.wait(10000);
+        }
+      });
+    cy.wait(15000);
+    cy.get('table > tr').eq(0).find('td > button').click(); // Click three dots in first row
+    cy.wait(1500);
+    cy.get('button').contains('Cancel Process').click(); // Click Cancel button
+    cy.wait(1500);
+    cy.get('h2').contains('Do you want to cancel the withdrawal?').should('be.visible');
+    cy.get('button').contains('OK').click();
+    cy.wait(5000);
+    cy.get('h2').contains('Success').should('be.visible');
+    cy.get('button').contains('OK').click();
   }
 
   withdrawCryptoInvalidFile() {
@@ -898,9 +1004,11 @@ export class WithdrawLocal {
           cy.wait(10000);
         }
       });
-
-    cy.get('table > tr').eq(0).find('td > button').contains('Cancel').click();
-    cy.wait(1000);
+    cy.wait(15000);
+    cy.get('table > tr').eq(0).find('td > button').click(); // Click three dots in first row
+    cy.wait(1500);
+    cy.get('button').contains('Cancel Process').click(); // Click Cancel button
+    cy.wait(1500);
     cy.get('h2').contains('Do you want to cancel the withdrawal?').should('be.visible');
     cy.get('button').contains('OK').click();
     cy.wait(5000);

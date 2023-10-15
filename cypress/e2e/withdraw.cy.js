@@ -46,6 +46,23 @@ describe('Withdraw Balance', () => {
   });
 
   context('Crypto Withdrawl', () => {
+    it('Users want to withdraw with crypto method but want to cancel it before approved by admin', () => {
+      // Login
+      loginFunction.loginCorrect(email, pass);
+
+      // Buka withdraw menu dari sidebar
+      cy.get('a[href="/withdraw"] > div > div > h4').contains('Withdraw').click();
+      cy.wait(10000);
+      cy.get('h1').contains('Withdraw').should('be.visible');
+
+      // Klik tab crypto
+      cy.get('a[href="/withdraw-crypto"]').click();
+      cy.wait(10000);
+
+      // Input data request withdraw crypto dan approve admin lewat API
+      withdrawCrypto.withdrawCryptoCancel();
+    });
+
     it('Users want to withdraw their balance with crypto method', () => {
       // Login
       loginFunction.loginCorrect(email, pass);

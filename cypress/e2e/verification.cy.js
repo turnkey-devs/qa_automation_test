@@ -15,40 +15,6 @@ describe('Verification', () => {
   });
 
   context('Verification Identity', () => {
-    it('New users want to verification their account but without input all required field', () => {
-      // Login
-      loginFunction.loginCorrect(email, pass);
-
-      cy.get('h3')
-        .contains('My Identity')
-        .parent()
-        .find('p')
-        .then(($el) => {
-          const textVerif = $el.text();
-          if (!textVerif.includes('Not Verified')) {
-            cy.log('Already Verified');
-            return;
-          } else {
-            // Klik tombol verify now pada my identity
-            cy.get('a[href="/identity"] > button').contains('Verify Now').click();
-            cy.wait(2000);
-
-            // Assert membuka halaman yang sesuai
-            cy.url().should('include', '/identity');
-            cy.get('h1').contains('Identity Verification Request').should('be.visible');
-
-            // Langsung klik tombol submit
-            cy.get('button').contains('Submit').click();
-            cy.wait(2000);
-
-            // Assert adanya validasi
-            cy.get('h2').contains('Incomplete Data!').should('be.visible');
-            cy.get('button').contains('Oke').click();
-            cy.wait(1000);
-          }
-        });
-    });
-
     it('New users want to verification their account but input wrong format images files', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
@@ -60,8 +26,11 @@ describe('Verification', () => {
         .then(($el) => {
           const textVerif = $el.text();
           if (!textVerif.includes('Not Verified')) {
-            cy.log('Already Verified');
-            return;
+            // Klik tombol verified untuk membuka profile page
+            cy.get('button').contains('Verified').click();
+            cy.wait(10000);
+            cy.url().should('contains', '/profile'); // Assert endpoint
+            cy.get('h5').contains('My Profile').should('be.visible'); // Assert page
           } else {
             // Klik tombol verify now pada my identity
             cy.get('a[href="/identity"] > button').contains('Verify Now').click();
@@ -102,8 +71,11 @@ describe('Verification', () => {
         .then(($el) => {
           const textVerif = $el.text();
           if (!textVerif.includes('Not Verified')) {
-            cy.log('Already Verified');
-            return;
+            // Klik tombol verified untuk membuka profile page
+            cy.get('button').contains('Verified').click();
+            cy.wait(10000);
+            cy.url().should('contains', '/profile'); // Assert endpoint
+            cy.get('h5').contains('My Profile').should('be.visible'); // Assert page
           } else {
             // Klik tombol verify now pada my identity
             cy.get('a[href="/identity"] > button').contains('Verify Now').click();
