@@ -598,7 +598,7 @@ export class Deposit {
     // Klik proceed deposit
     cy.get('button').contains('Request Deposit').click();
     cy.wait(2000);
-    cy.get('div').contains('Deposit Bank').should('be.visible');
+    cy.get('div').contains('Deposit Crypto').should('be.visible');
     cy.get('button').contains('Continue').click();
     cy.get(2000);
     cy.get('h2').contains('Are You Confident With Your Data?').should('be.visible');
