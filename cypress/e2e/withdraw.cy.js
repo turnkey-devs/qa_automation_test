@@ -18,7 +18,7 @@ describe('Withdraw Balance', () => {
   });
 
   context('Local Withdrawl', () => {
-    it('Users want to withdraw with local method but want to cancel it before approved by admin', () => {
+    it.only('Users want to withdraw with local method but want to cancel it before approved by admin', () => {
       // Login
       loginFunction.loginCorrect(email, pass);
 

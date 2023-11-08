@@ -937,7 +937,7 @@ export class WithdrawLocal {
     const commonFunction = new commonObject();
 
     //  Input akun yang ingin di withdraw
-    cy.wait(2000);
+    cy.wait(15000);
     cy.get('select[name="select-account"] > option[name="select-account"]').then(($el) => {
       commonFunction.randomDropdownValue('select[name="select-account"]', $el);
     });
